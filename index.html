@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Job Search Tracker — Direction des Opérations Industrielles</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #F7F6F3;
+  --surface: #FFFFFF;
+  --surface2: #F0EEE9;
+  --border: #E2DED8;
+  --border2: #CBC7C0;
+  --text: #1A1916;
+  --text2: #6B6860;
+  --text3: #9E9B95;
+  --go: #2D6A4F; --go-bg: #D8F3DC;
+  --cond: #7B5E00; --cond-bg: #FFF3B0;
+  --no: #9B2226; --no-bg: #FFE3E3;
+  --doc: #1B4F72; --doc-bg: #D6EAF8;
+  --blue: #1B4F72; --blue-bg: #D6EAF8;
+  --amber: #7B5E00; --amber-bg: #FFF3B0;
+  --radius: 10px;
+  --radius-sm: 6px;
+  --shadow: 0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+  --shadow-md: 0 4px 12px rgba(0,0,0,.08), 0 2px 4px rgba(0,0,0,.04);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  font-size: 14px;
+}
+
+/* TOPBAR */
+.topbar {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 56px;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+.logo {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  letter-spacing: -.3px;
+}
+.logo span { color: var(--text3); font-weight: 400; }
+.topbar-actions { display: flex; gap: 8px; align-items: center; }
+
+/* MAIN */
+.main { padding: 24px; max-width: 1400px; margin: 0 auto; }
+
+/* KPIs */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+  margin-bottom: 24px;
+}
+.kpi-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  box-shadow: var(--shadow);
+}
+.kpi-label { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: .6px; margin-bottom: 6px; }
+.kpi-val { font-size: 28px; font-weight: 600; color: var(--text); line-height: 1; margin-bottom: 4px; }
+.kpi-sub { font-size: 11px; color: var(--text3); }
+.kpi-bar { height: 3px; background: var(--border); border-radius: 2px; margin-top: 10px; overflow: hidden; }
+.kpi-bar-fill { height: 100%; background: var(--text2); border-radius: 2px; transition: width .4s; }
+
+/* FILTERS */
+.filters {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+.filter-label { font-size: 12px; color: var(--text3); }
+.filter-btn {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  padding: 5px 12px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: var(--surface);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all .15s;
+}
+.filter-btn:hover, .filter-btn.active {
+  background: var(--text);
+  color: #fff;
+  border-color: var(--text);
+}
+
+/* BOARD */
+.board {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 12px;
+  align-items: start;
+}
+.col {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px;
+  min-height: 200px;
+}
+.col-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+}
+.col-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  margin-right: 7px;
+  flex-shrink: 0;
+}
+.col-title-wrap { display: flex; align-items: center; }
+.col-title { font-size: 12px; font-weight: 500; color: var(--text2); }
+.col-count {
+  font-size: 11px;
+  font-family: 'DM Mono', monospace;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1px 8px;
+  color: var(--text3);
+}
+
+/* CARD */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 12px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: box-shadow .15s, border-color .15s, transform .1s;
+  box-shadow: var(--shadow);
+}
+.card:hover {
+  border-color: var(--border2);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+.card-title { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 3px; line-height: 1.35; }
+.card-company { font-size: 12px; color: var(--text2); margin-bottom: 8px; }
+.card-footer { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.badge {
+  font-size: 10px;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 10px;
+  white-space: nowrap;
+}
+.badge-go { background: var(--go-bg); color: var(--go); }
+.badge-cond { background: var(--cond-bg); color: var(--cond); }
+.badge-no { background: var(--no-bg); color: var(--no); }
+.badge-doc { background: var(--doc-bg); color: var(--doc); }
+.card-score {
+  font-size: 11px;
+  font-family: 'DM Mono', monospace;
+  color: var(--text3);
+}
+.card-source {
+  font-size: 10px;
+  color: var(--text3);
+  margin-left: auto;
+}
+.score-bar {
+  height: 2px;
+  background: var(--border);
+  border-radius: 1px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+.score-bar-fill {
+  height: 100%;
+  border-radius: 1px;
+  transition: width .3s;
+}
+
+/* ADD BUTTON */
+.add-btn {
+  width: 100%;
+  padding: 8px;
+  border: 1px dashed var(--border2);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text3);
+  font-size: 12px;
+  font-family: 'DM Sans', sans-serif;
+  cursor: pointer;
+  transition: all .15s;
+  margin-top: 4px;
+}
+.add-btn:hover {
+  background: var(--surface);
+  color: var(--text2);
+  border-color: var(--border2);
+}
+
+/* BUTTONS */
+.btn {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all .15s;
+  font-weight: 500;
+}
+.btn-primary {
+  background: var(--text);
+  color: #fff;
+  border: none;
+}
+.btn-primary:hover { background: #333; }
+.btn-secondary {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--border2);
+}
+.btn-secondary:hover { background: var(--surface2); }
+.btn-danger {
+  background: var(--no-bg);
+  color: var(--no);
+  border: none;
+  margin-right: auto;
+}
+.btn-sm {
+  font-size: 11px;
+  padding: 5px 12px;
+  border-radius: 20px;
+}
+
+/* MODAL */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(26,25,22,.45);
+  z-index: 100;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.modal-overlay.open { display: flex; }
+.modal {
+  background: var(--surface);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  padding: 28px;
+  width: min(520px, 100%);
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow-md);
+}
+.modal h3 {
+  font-size: 17px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: var(--text);
+}
+.field { margin-bottom: 14px; }
+.field label {
+  display: block;
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  color: var(--text3);
+  margin-bottom: 5px;
+}
+.field input, .field select, .field textarea {
+  width: 100%;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  padding: 9px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--text);
+  outline: none;
+  transition: border-color .15s;
+}
+.field input:focus, .field select:focus, .field textarea:focus {
+  border-color: var(--border2);
+  box-shadow: 0 0 0 3px rgba(26,25,22,.06);
+}
+.field textarea { height: 90px; resize: vertical; }
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 20px; }
+
+/* DETAIL */
+.detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+.detail-item {}
+.detail-label { font-size: 11px; text-transform: uppercase; letter-spacing: .5px; color: var(--text3); margin-bottom: 4px; }
+.detail-val { font-size: 14px; color: var(--text); }
+.detail-divider { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
+.detail-notes { font-size: 13px; color: var(--text2); line-height: 1.7; white-space: pre-wrap; }
+.move-section { margin: 16px 0; }
+.move-section .detail-label { margin-bottom: 8px; }
+.move-btns { display: flex; gap: 6px; flex-wrap: wrap; }
+.move-btn {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  padding: 5px 12px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: transparent;
+  cursor: pointer;
+  color: var(--text2);
+  transition: all .15s;
+}
+.move-btn:hover { background: var(--surface2); border-color: var(--border2); }
+
+/* EMPTY STATE */
+.empty {
+  text-align: center;
+  padding: 24px 12px;
+  color: var(--text3);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+/* TOAST */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: var(--text);
+  color: #fff;
+  padding: 10px 16px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  z-index: 200;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: all .2s;
+  pointer-events: none;
+}
+.toast.show { opacity: 1; transform: translateY(0); }
+
+/* STATS VIEW */
+.stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px; }
+.stat-block {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+}
+.stat-block h4 { font-size: 12px; color: var(--text3); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 16px; }
+.stat-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-size: 13px; }
+.stat-row-label { color: var(--text2); }
+.stat-row-val { font-weight: 500; color: var(--text); font-family: 'DM Mono', monospace; font-size: 12px; }
+
+/* VIEW TOGGLE */
+.view-toggle { display: flex; gap: 4px; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 3px; }
+.view-btn {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  padding: 5px 12px;
+  border: none;
+  border-radius: 5px;
+  background: transparent;
+  color: var(--text3);
+  cursor: pointer;
+  transition: all .15s;
+}
+.view-btn.active { background: var(--surface); color: var(--text); box-shadow: var(--shadow); }
+
+/* LIST VIEW */
+.list-view { display: none; }
+.list-view.active { display: block; }
+.board-view.hidden { display: none; }
+.list-table { width: 100%; border-collapse: collapse; background: var(--surface); border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border); }
+.list-table th { font-size: 11px; text-transform: uppercase; letter-spacing: .5px; color: var(--text3); padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--border); background: var(--surface2); font-weight: 500; }
+.list-table td { font-size: 13px; padding: 11px 14px; border-bottom: 1px solid var(--border); color: var(--text); }
+.list-table tr:last-child td { border-bottom: none; }
+.list-table tr:hover td { background: var(--surface2); cursor: pointer; }
+
+@media (max-width: 900px) {
+  .board { grid-template-columns: repeat(2, 1fr); }
+  .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="logo">Job Search Tracker <span>· Direction des Opérations Industrielles</span></div>
+  <div class="topbar-actions">
+    <div class="view-toggle">
+      <button class="view-btn active" onclick="setView('board')">Kanban</button>
+      <button class="view-btn" onclick="setView('list')">Liste</button>
+      <button class="view-btn" onclick="setView('stats')">Stats</button>
+    </div>
+    <button class="btn btn-primary btn-sm" onclick="openAdd('watch')">+ Nouvelle offre</button>
+  </div>
+</div>
+
+<div class="main">
+  <div class="kpi-grid" id="kpis"></div>
+
+  <div class="filters">
+    <span class="filter-label">Filtrer :</span>
+    <button class="filter-btn active" onclick="setFilter('all', this)">Toutes</button>
+    <button class="filter-btn" onclick="setFilter('go', this)">GO</button>
+    <button class="filter-btn" onclick="setFilter('cond', this)">GO sous cond.</button>
+    <button class="filter-btn" onclick="setFilter('no', this)">NO GO</button>
+    <button class="filter-btn" onclick="setFilter('LinkedIn', this)">LinkedIn</button>
+    <button class="filter-btn" onclick="setFilter('Indeed', this)">Indeed</button>
+    <button class="filter-btn" onclick="setFilter('APEC', this)">APEC</button>
+  </div>
+
+  <div id="boardWrap" class="board-view">
+    <div class="board" id="board"></div>
+  </div>
+
+  <div id="listWrap" class="list-view">
+    <table class="list-table" id="listTable">
+      <thead><tr>
+        <th>Poste</th><th>Entreprise</th><th>Localisation</th>
+        <th>Source</th><th>Score</th><th>Verdict</th><th>Statut</th><th>Date</th>
+      </tr></thead>
+      <tbody id="listBody"></tbody>
+    </table>
+  </div>
+
+  <div id="statsWrap" class="list-view">
+    <div class="stats-grid" id="statsContent"></div>
+  </div>
+</div>
+
+<!-- ADD MODAL -->
+<div class="modal-overlay" id="addModal">
+  <div class="modal">
+    <h3 id="addModalTitle">Ajouter une offre</h3>
+    <div class="field-row">
+      <div class="field"><label>Poste *</label><input id="f-title" placeholder="Directeur des Opérations"></div>
+      <div class="field"><label>Entreprise *</label><input id="f-company" placeholder="Entreprise"></div>
+    </div>
+    <div class="field-row">
+      <div class="field"><label>Localisation</label><input id="f-location" placeholder="Lyon (69)"></div>
+      <div class="field"><label>Source</label>
+        <select id="f-source">
+          <option>LinkedIn</option><option>Indeed</option><option>APEC</option>
+          <option>Headhunter</option><option>Réseau</option><option>Autre</option>
+        </select>
+      </div>
+    </div>
+    <div class="field-row">
+      <div class="field"><label>Score /100</label><input id="f-score" type="number" min="0" max="100" placeholder="78"></div>
+      <div class="field"><label>Verdict</label>
+        <select id="f-verdict">
+          <option value="go">GO</option>
+          <option value="cond">GO sous conditions</option>
+          <option value="no">NO GO</option>
+          <option value="doc">À documenter</option>
+        </select>
+      </div>
+    </div>
+    <div class="field-row">
+      <div class="field"><label>Salaire / Package</label><input id="f-salary" placeholder="100-120K€"></div>
+      <div class="field"><label>Statut initial</label>
+        <select id="f-status">
+          <option value="watch">Veille</option>
+          <option value="applied">Candidaté</option>
+          <option value="interview">Entretien</option>
+          <option value="offer">Offre</option>
+          <option value="closed">Clôturé</option>
+        </select>
+      </div>
+    </div>
+    <div class="field"><label>Notes / Risques détectés</label>
+      <textarea id="f-notes" placeholder="Risques, questions à poser, contexte..."></textarea>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" onclick="closeAdd()">Annuler</button>
+      <button class="btn btn-primary" onclick="saveCard()">Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<!-- DETAIL MODAL -->
+<div class="modal-overlay" id="detailModal">
+  <div class="modal">
+    <h3 id="d-title"></h3>
+    <div class="detail-grid">
+      <div class="detail-item"><div class="detail-label">Entreprise</div><div class="detail-val" id="d-company"></div></div>
+      <div class="detail-item"><div class="detail-label">Localisation</div><div class="detail-val" id="d-location"></div></div>
+      <div class="detail-item"><div class="detail-label">Source</div><div class="detail-val" id="d-source"></div></div>
+      <div class="detail-item"><div class="detail-label">Salaire</div><div class="detail-val" id="d-salary"></div></div>
+      <div class="detail-item"><div class="detail-label">Score</div><div class="detail-val" id="d-score"></div></div>
+      <div class="detail-item"><div class="detail-label">Verdict</div><div class="detail-val" id="d-verdict"></div></div>
+      <div class="detail-item"><div class="detail-label">Statut</div><div class="detail-val" id="d-status"></div></div>
+      <div class="detail-item"><div class="detail-label">Ajoutée le</div><div class="detail-val" id="d-date"></div></div>
+    </div>
+    <hr class="detail-divider">
+    <div class="detail-label" style="margin-bottom:8px">Notes / Risques</div>
+    <div class="detail-notes" id="d-notes"></div>
+    <hr class="detail-divider">
+    <div class="move-section">
+      <div class="detail-label">Déplacer vers</div>
+      <div class="move-btns" id="d-movebts"></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-danger btn-sm" onclick="deleteCard()">Supprimer</button>
+      <button class="btn btn-secondary" onclick="closeDetail()">Fermer</button>
+      <button class="btn btn-secondary" onclick="editCard()">Modifier</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const COLS = [
+  {id:'watch', label:'Veille', color:'#9E9B95'},
+  {id:'applied', label:'Candidaté', color:'#185FA5'},
+  {id:'interview', label:'Entretien', color:'#854F0B'},
+  {id:'offer', label:'Offre reçue', color:'#2D6A4F'},
+  {id:'closed', label:'Clôturé', color:'#9B2226'}
+];
+const VERDICTS = {
+  go: {label:'GO', cls:'badge-go'},
+  cond: {label:'GO cond.', cls:'badge-cond'},
+  no: {label:'NO GO', cls:'badge-no'},
+  doc: {label:'À doc.', cls:'badge-doc'}
+};
+const SCORE_COLORS = s => s >= 75 ? '#2D6A4F' : s >= 60 ? '#7B5E00' : '#9B2226';
+
+let cards = [];
+let activeFilter = 'all';
+let currentView = 'board';
+let detailId = null;
+let editId = null;
+let addTargetCol = 'watch';
+
+function load() {
+  try {
+    const raw = localStorage.getItem('jst_v1');
+    if(raw) cards = JSON.parse(raw);
+  } catch(e) { cards = []; }
+  render();
+}
+
+function save() {
+  localStorage.setItem('jst_v1', JSON.stringify(cards));
+}
+
+function filtered() {
+  if(activeFilter === 'all') return cards;
+  if(['go','cond','no','doc'].includes(activeFilter)) return cards.filter(c=>c.verdict===activeFilter);
+  return cards.filter(c=>c.source===activeFilter);
+}
+
+function render() {
+  renderKPIs();
+  if(currentView==='board') renderBoard();
+  if(currentView==='list') renderList();
+  if(currentView==='stats') renderStats();
+}
+
+function renderKPIs() {
+  const all = cards;
+  const total = all.length;
+  const go = all.filter(c=>c.verdict==='go').length;
+  const interviews = all.filter(c=>c.status==='interview').length;
+  const offers = all.filter(c=>c.status==='offer').length;
+  const applied = all.filter(c=>['applied','interview','offer'].includes(c.status)).length;
+  const rate = applied ? Math.round(interviews/applied*100) : 0;
+  const avgScore = total ? Math.round(all.filter(c=>c.score).reduce((a,c)=>a+parseInt(c.score),0)/all.filter(c=>c.score).length)||0 : 0;
+
+  document.getElementById('kpis').innerHTML = `
+    <div class="kpi-card">
+      <div class="kpi-label">Pipeline total</div>
+      <div class="kpi-val">${total}</div>
+      <div class="kpi-sub">offres suivies</div>
+      <div class="kpi-bar"><div class="kpi-bar-fill" style="width:100%"></div></div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">GO confirmés</div>
+      <div class="kpi-val">${go}</div>
+      <div class="kpi-sub">${total ? Math.round(go/total*100) : 0}% du pipeline</div>
+      <div class="kpi-bar"><div class="kpi-bar-fill" style="width:${total?Math.round(go/total*100):0}%;background:#2D6A4F"></div></div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Candidatures</div>
+      <div class="kpi-val">${applied}</div>
+      <div class="kpi-sub">dossiers envoyés</div>
+      <div class="kpi-bar"><div class="kpi-bar-fill" style="width:${total?Math.round(applied/total*100):0}%;background:#185FA5"></div></div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Entretiens</div>
+      <div class="kpi-val">${interviews}</div>
+      <div class="kpi-sub">taux conv. ${rate}%</div>
+      <div class="kpi-bar"><div class="kpi-bar-fill" style="width:${rate}%;background:#854F0B"></div></div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Score moyen</div>
+      <div class="kpi-val">${avgScore || '—'}</div>
+      <div class="kpi-sub">${offers} offre(s) reçue(s)</div>
+      <div class="kpi-bar"><div class="kpi-bar-fill" style="width:${avgScore}%;background:${SCORE_COLORS(avgScore)}"></div></div>
+    </div>
+  `;
+}
+
+function renderBoard() {
+  const fCards = filtered();
+  document.getElementById('board').innerHTML = COLS.map(col => {
+    const colCards = fCards.filter(c=>c.status===col.id);
+    return `<div class="col">
+      <div class="col-header">
+        <div class="col-title-wrap">
+          <div class="col-dot" style="background:${col.color}"></div>
+          <span class="col-title">${col.label}</span>
+        </div>
+        <span class="col-count">${colCards.length}</span>
+      </div>
+      ${colCards.length === 0 ? `<div class="empty">Aucune offre</div>` : ''}
+      ${colCards.map(c => {
+        const sc = parseInt(c.score)||0;
+        return `<div class="card" onclick="openDetail('${c.id}')">
+          <div class="card-title">${c.title}</div>
+          <div class="card-company">${c.company}${c.location?' · '+c.location:''}</div>
+          <div class="card-footer">
+            <span class="badge ${VERDICTS[c.verdict]?.cls||'badge-doc'}">${VERDICTS[c.verdict]?.label||'—'}</span>
+            ${c.score?`<span class="card-score">${c.score}/100</span>`:''}
+            <span class="card-source">${c.source}</span>
+          </div>
+          ${c.score?`<div class="score-bar"><div class="score-bar-fill" style="width:${sc}%;background:${SCORE_COLORS(sc)}"></div></div>`:''}
+        </div>`;
+      }).join('')}
+      <button class="add-btn" onclick="openAdd('${col.id}')">+ Ajouter</button>
+    </div>`;
+  }).join('');
+}
+
+function renderList() {
+  const fCards = filtered();
+  document.getElementById('listBody').innerHTML = fCards.map(c => `
+    <tr onclick="openDetail('${c.id}')">
+      <td style="font-weight:500">${c.title}</td>
+      <td>${c.company}</td>
+      <td>${c.location||'—'}</td>
+      <td>${c.source}</td>
+      <td style="font-family:'DM Mono',monospace;font-size:12px">${c.score?c.score+'/100':'—'}</td>
+      <td><span class="badge ${VERDICTS[c.verdict]?.cls||'badge-doc'}">${VERDICTS[c.verdict]?.label||'—'}</span></td>
+      <td>${COLS.find(x=>x.id===c.status)?.label||c.status}</td>
+      <td style="color:var(--text3);font-size:12px">${c.date}</td>
+    </tr>
+  `).join('') || '<tr><td colspan="8" style="text-align:center;color:var(--text3);padding:24px">Aucune offre</td></tr>';
+}
+
+function renderStats() {
+  const all = cards;
+  const bySource = {};
+  const byVerdict = {go:0,cond:0,no:0,doc:0};
+  const byStatus = {};
+  all.forEach(c=>{
+    bySource[c.source] = (bySource[c.source]||0)+1;
+    byVerdict[c.verdict] = (byVerdict[c.verdict]||0)+1;
+    byStatus[c.status] = (byStatus[c.status]||0)+1;
+  });
+
+  document.getElementById('statsContent').innerHTML = `
+    <div class="stat-block">
+      <h4>Par source</h4>
+      ${Object.entries(bySource).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`
+        <div class="stat-row"><span class="stat-row-label">${k}</span><span class="stat-row-val">${v}</span></div>
+      `).join('') || '<div style="color:var(--text3);font-size:13px">Aucune donnée</div>'}
+    </div>
+    <div class="stat-block">
+      <h4>Par verdict</h4>
+      <div class="stat-row"><span class="stat-row-label">GO</span><span class="stat-row-val" style="color:var(--go)">${byVerdict.go}</span></div>
+      <div class="stat-row"><span class="stat-row-label">GO sous conditions</span><span class="stat-row-val" style="color:var(--cond)">${byVerdict.cond}</span></div>
+      <div class="stat-row"><span class="stat-row-label">NO GO</span><span class="stat-row-val" style="color:var(--no)">${byVerdict.no}</span></div>
+      <div class="stat-row"><span class="stat-row-label">À documenter</span><span class="stat-row-val" style="color:var(--doc)">${byVerdict.doc}</span></div>
+    </div>
+    <div class="stat-block">
+      <h4>Par statut</h4>
+      ${COLS.map(col=>`
+        <div class="stat-row">
+          <span class="stat-row-label" style="display:flex;align-items:center;gap:6px">
+            <span style="width:7px;height:7px;border-radius:50%;background:${col.color};display:inline-block"></span>
+            ${col.label}
+          </span>
+          <span class="stat-row-val">${byStatus[col.id]||0}</span>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+
+function setView(v) {
+  currentView = v;
+  document.querySelectorAll('.view-btn').forEach((b,i)=>{
+    b.classList.toggle('active', ['board','list','stats'][i]===v);
+  });
+  document.getElementById('boardWrap').classList.toggle('hidden', v!=='board');
+  document.getElementById('listWrap').classList.toggle('active', v==='list');
+  document.getElementById('statsWrap').classList.toggle('active', v==='stats');
+  render();
+}
+
+function setFilter(f, btn) {
+  activeFilter = f;
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  render();
+}
+
+function openAdd(colId) {
+  addTargetCol = colId;
+  editId = null;
+  document.getElementById('addModalTitle').textContent = 'Ajouter une offre';
+  ['title','company','location','salary','score','notes'].forEach(f=>document.getElementById('f-'+f).value='');
+  document.getElementById('f-source').value = 'LinkedIn';
+  document.getElementById('f-verdict').value = 'go';
+  document.getElementById('f-status').value = colId;
+  document.getElementById('addModal').classList.add('open');
+}
+
+function closeAdd() { document.getElementById('addModal').classList.remove('open'); }
+
+function saveCard() {
+  const title = document.getElementById('f-title').value.trim();
+  const company = document.getElementById('f-company').value.trim();
+  if(!title||!company) { showToast('Poste et entreprise requis'); return; }
+
+  if(editId) {
+    const c = cards.find(x=>x.id===editId);
+    if(c) {
+      c.title=title; c.company=company;
+      c.location=document.getElementById('f-location').value.trim();
+      c.source=document.getElementById('f-source').value;
+      c.score=document.getElementById('f-score').value;
+      c.verdict=document.getElementById('f-verdict').value;
+      c.salary=document.getElementById('f-salary').value.trim();
+      c.notes=document.getElementById('f-notes').value.trim();
+      c.status=document.getElementById('f-status').value;
+    }
+    showToast('Offre mise à jour');
+  } else {
+    cards.push({
+      id: Date.now().toString(),
+      title, company,
+      location: document.getElementById('f-location').value.trim(),
+      source: document.getElementById('f-source').value,
+      score: document.getElementById('f-score').value,
+      verdict: document.getElementById('f-verdict').value,
+      salary: document.getElementById('f-salary').value.trim(),
+      notes: document.getElementById('f-notes').value.trim(),
+      status: document.getElementById('f-status').value || addTargetCol,
+      date: new Date().toLocaleDateString('fr-FR')
+    });
+    showToast('Offre ajoutée');
+  }
+  save(); render(); closeAdd();
+}
+
+function openDetail(id) {
+  const c = cards.find(x=>x.id===id);
+  if(!c) return;
+  detailId = id;
+  document.getElementById('d-title').textContent = c.title;
+  document.getElementById('d-company').textContent = c.company;
+  document.getElementById('d-location').textContent = c.location||'—';
+  document.getElementById('d-source').textContent = c.source;
+  document.getElementById('d-salary').textContent = c.salary||'Non documenté';
+  document.getElementById('d-score').textContent = c.score ? c.score+'/100' : 'Non scoré';
+  document.getElementById('d-verdict').innerHTML = `<span class="badge ${VERDICTS[c.verdict]?.cls||'badge-doc'}">${VERDICTS[c.verdict]?.label||'—'}</span>`;
+  document.getElementById('d-status').textContent = COLS.find(x=>x.id===c.status)?.label||c.status;
+  document.getElementById('d-date').textContent = c.date;
+  document.getElementById('d-notes').textContent = c.notes||'—';
+  document.getElementById('d-movebts').innerHTML = COLS.filter(x=>x.id!==c.status).map(col=>
+    `<button class="move-btn" onclick="moveCard('${col.id}')">${col.label}</button>`
+  ).join('');
+  document.getElementById('detailModal').classList.add('open');
+}
+
+function moveCard(newStatus) {
+  const c = cards.find(x=>x.id===detailId);
+  if(c) { c.status=newStatus; save(); render(); closeDetail(); showToast('Offre déplacée'); }
+}
+
+function editCard() {
+  const c = cards.find(x=>x.id===detailId);
+  if(!c) return;
+  closeDetail();
+  editId = c.id;
+  document.getElementById('addModalTitle').textContent = 'Modifier l\'offre';
+  document.getElementById('f-title').value = c.title;
+  document.getElementById('f-company').value = c.company;
+  document.getElementById('f-location').value = c.location||'';
+  document.getElementById('f-source').value = c.source;
+  document.getElementById('f-score').value = c.score||'';
+  document.getElementById('f-verdict').value = c.verdict||'go';
+  document.getElementById('f-salary').value = c.salary||'';
+  document.getElementById('f-notes').value = c.notes||'';
+  document.getElementById('f-status').value = c.status;
+  document.getElementById('addModal').classList.add('open');
+}
+
+function deleteCard() {
+  if(!confirm('Supprimer cette offre ?')) return;
+  cards = cards.filter(x=>x.id!==detailId);
+  save(); render(); closeDetail(); showToast('Offre supprimée');
+}
+
+function closeDetail() { document.getElementById('detailModal').classList.remove('open'); }
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 2200);
+}
+
+document.querySelectorAll('.modal-overlay').forEach(m=>{
+  m.addEventListener('click', e=>{ if(e.target===m) m.classList.remove('open'); });
+});
+
+load();
+</script>
+</body>
+</html>

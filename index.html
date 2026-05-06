@@ -567,7 +567,12 @@ body {
       <button class="view-btn" onclick="setView('list')">Liste</button>
       <button class="view-btn" onclick="setView('stats')">Stats</button>
     </div>
-    <button class="btn btn-primary btn-sm" onclick="openAdd('watch')">+ Nouvelle offre</button>
+    <div style="display:flex;gap:8px;align-items:center">
+      <button class="btn btn-secondary btn-sm" onclick="exportData()" title="Sauvegarder toutes les données en fichier JSON">💾 Sauvegarder</button>
+      <button class="btn btn-secondary btn-sm" onclick="document.getElementById('importInput').click()" title="Restaurer depuis un fichier JSON">📂 Restaurer</button>
+      <input type="file" id="importInput" accept=".json" style="display:none" onchange="importData(event)">
+      <button class="btn btn-primary btn-sm" onclick="openAdd('watch')">+ Nouvelle offre</button>
+    </div>
   </div>
 </div>
 
@@ -843,14 +848,85 @@ let addTargetCol = 'watch';
 function load() {
   try {
     const raw = localStorage.getItem('jst_v1');
-    if(raw) cards = JSON.parse(raw);
+    if(raw) {
+      cards = JSON.parse(raw);
+    } else {
+      // Charger les données seed intégrées au fichier
+      cards = SEED_DATA.map(c => ({...c}));
+      save(); // persister immédiatement dans localStorage
+      showToast('✅ ' + cards.length + ' offres chargées depuis les données intégrées');
+    }
   } catch(e) { cards = []; }
   render();
+  checkBackupReminder();
 }
 
 function save() {
   localStorage.setItem('jst_v1', JSON.stringify(cards));
+  // Badge de sauvegarde
+  const btn = document.querySelector('[onclick="exportData()"]');
+  if(btn) { btn.textContent = '✅ Sauvegardé'; setTimeout(()=>{ btn.textContent = '💾 Sauvegarder'; }, 2000); }
 }
+
+// ── EXPORT ───────────────────────────────────────────────────────────
+function exportData() {
+  const data = {
+    version: 'jst_v2',
+    exportedAt: new Date().toISOString(),
+    cards: cards
+  };
+  const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const date = new Date().toISOString().slice(0,10);
+  a.href = url;
+  a.download = `job-tracker-backup-${date}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('💾 Backup téléchargé — ' + cards.length + ' offres sauvegardées');
+}
+
+// ── IMPORT ───────────────────────────────────────────────────────────
+function importData(event) {
+  const file = event.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const data = JSON.parse(e.target.result);
+      // Accepte format v2 (objet avec .cards) ou format brut (tableau)
+      const imported = Array.isArray(data) ? data : (data.cards || []);
+      if(!Array.isArray(imported) || imported.length === 0) {
+        showToast('❌ Fichier invalide ou vide');
+        return;
+      }
+      if(cards.length > 0) {
+        if(!confirm(`Remplacer les ${cards.length} offres actuelles par les ${imported.length} offres du backup ?\n\nCliquez OK pour confirmer.`)) return;
+      }
+      cards = imported;
+      save();
+      render();
+      showToast('✅ ' + imported.length + ' offres restaurées depuis le backup');
+    } catch(err) {
+      showToast('❌ Erreur de lecture du fichier JSON');
+    }
+  };
+  reader.readAsText(file);
+  event.target.value = ''; // reset input
+}
+
+// ── AUTO-BACKUP REMINDER ─────────────────────────────────────────────
+function checkBackupReminder() {
+  const lastBackup = localStorage.getItem('jst_lastBackup');
+  const now = Date.now();
+  if(!lastBackup || (now - parseInt(lastBackup)) > 24*60*60*1000) {
+    if(cards.length > 0) {
+      const btn = document.querySelector('[onclick="exportData()"]');
+      if(btn) btn.style.background = '#FFF3B0';
+    }
+  }
+}
+
 
 function filtered() {
   if(activeFilter === 'all') return cards;
@@ -1251,7 +1327,52 @@ function applyCalcScore() {
   if (el) el.addEventListener('input', () => { if(calcOpen) calcScore(); });
 });
 
-// ── END SCORE CALCULATOR ─────────────────────────────────────────
+// ── SEED DATA — données de référence intégrées au fichier ────────────
+// Chargées automatiquement si localStorage est vide (nouvelle session, cache vidé, etc.)
+const SEED_DATA = [
+  {id:'c1',title:"Directeur d'Unité Industrielle F/H",company:"Veolia RVD",location:"France",source:"Indeed",score:79,verdict:"go",salary:"NC",status:"watch",notes:"Match direct Indeed ×2 (01/05 + 25/04). Scope unité industrielle, process 24/7. Action : trouver l'offre complète et qualifier périmètre + reporting. ⚠ Flag biais attractivité actif.",date:"2026-05-06"},
+  {id:'c2',title:"Directeur Industriel Groupe F/H",company:"ACO",location:"France",source:"Indeed",score:77,verdict:"go",salary:"NC",status:"watch",notes:"Match direct Indeed (22/04). Titre Groupe = dimension multi-site probable. Rechercher offre complète + vérifier périmètre et secteur ACO.",date:"2026-05-06"},
+  {id:'c3',title:"Directeur Usine F/H",company:"PLACO® (Saint-Gobain)",location:"France",source:"LinkedIn",score:72,verdict:"go",salary:"NC",status:"watch",notes:"LinkedIn (04/05). Groupe de référence, process continu chimique/minéral. Lire offre LinkedIn complète, confirmer périmètre et reporting. ⚠ Flag biais attractivité actif.",date:"2026-05-06"},
+  {id:'c4',title:"Directeur des Opérations F/H",company:"Elior Group",location:"France",source:"LinkedIn",score:74,verdict:"go",salary:"NC",status:"watch",notes:"⚠️ URGENT — expire le 12/05. Elior = groupe restauration collective industrielle, ops multi-sites. Vérifier levier management et scope.",date:"2026-05-06"},
+  {id:'c5',title:"Responsable d'Unité de Production H/F",company:"ALSTOM",location:"France",source:"Indeed",score:71,verdict:"go",salary:"NC",status:"watch",notes:"Match direct Indeed (05/05). ALSTOM = groupe industriel de référence, process ferroviaire. Vérifier taille unité et périmètre.",date:"2026-05-06"},
+  {id:'c6',title:"Directeur de production / Directrice de production",company:"Smurfit Westrock",location:"France",source:"LinkedIn",score:68,verdict:"go",salary:"NC",status:"watch",notes:"LinkedIn (30/04). Groupe industriel papier/emballage international, process continu. Vérifier localisation et périmètre site.",date:"2026-05-06"},
+  {id:'c7',title:"Directeur de site / Plant Manager H/F",company:"Covestro",location:"France",source:"LinkedIn",score:73,verdict:"go",salary:"NC",status:"watch",notes:"LinkedIn (26/04). Covestro = groupe chimie international, process continu, culture ingénierie forte. Directeur de site = périmètre plein. Vérifier localisation et taille site.",date:"2026-05-06"},
+  {id:'c8',title:"Directeur Industriel F/H",company:"Michael Page International",location:"Dijon (21)",source:"APEC",score:72,verdict:"go",salary:"NC",status:"watch",notes:"APEC (05/05). Michael Page = cabinet tier 1, Directeur Industriel senior, Dijon = proximité géographique favorable. Vérifier secteur et périmètre du client — GO fort si industrie process ou manufacturing.",date:"2026-05-06"},
+  {id:'c9',title:"Directeur d'Usines F/H",company:"HORUS CONSEILS",location:"Issoire (63)",source:"APEC",score:70,verdict:"go",salary:"NC",status:"watch",notes:"APEC (05/05). Titre pluriel 'Directeur d'Usines' = scope multi-sites potentiel. HORUS CONSEILS = cabinet industriel. Issoire 63 = Auvergne, mobilité à confirmer. Vérifier secteur client (aéronautique/industrie lourde).",date:"2026-05-06"},
+  {id:'c10',title:"Directeur d'Usine H/F/X",company:"Mondelēz International",location:"France",source:"LinkedIn",score:68,verdict:"cond",salary:"NC",status:"watch",notes:"LinkedIn (02/05). Groupe international, usine process alimentaire. GO si site >300 personnes — vérifier localisation.",date:"2026-05-06"},
+  {id:'c11',title:"Directeur de site H/F",company:"SND",location:"France",source:"Indeed",score:65,verdict:"cond",salary:"85K€+",status:"watch",notes:"Match Indeed (24/04). Rémunération documentée. Identifier secteur et taille site SND avant toute démarche.",date:"2026-05-06"},
+  {id:'c12',title:"Directeur des Opérations – Scale-up",company:"Collective.work",location:"France",source:"Indeed",score:63,verdict:"cond",salary:"80-120K€",status:"watch",notes:"Indeed (28/04). Rémunération senior. Risque scale-up / 'bras droit fondateur' ambigu. Vérifier si activité industrielle réelle.",date:"2026-05-06"},
+  {id:'c13',title:"Plant Manager",company:"Pacific International Executive Search",location:"France",source:"LinkedIn",score:62,verdict:"cond",salary:"NC",status:"watch",notes:"LinkedIn (03/05). Cabinet executive search. Vérifier géographie France + secteur industriel.",date:"2026-05-06"},
+  {id:'c14',title:"Directeur Industriel Adjoint H/F",company:"Comeca Group",location:"France",source:"LinkedIn",score:63,verdict:"cond",salary:"NC",status:"watch",notes:"LinkedIn (30/04). Comeca = solutions électriques industrielles. Adjoint = scope à qualifier. Vérifier si évolution vers direction pleine.",date:"2026-05-06"},
+  {id:'c15',title:"Directeur des Opérations H/F",company:"Advisia RH",location:"France",source:"LinkedIn",score:60,verdict:"cond",salary:"NC",status:"watch",notes:"LinkedIn (01/05). Cabinet Advisia = client non identifié. Vérifier le client réel avant décision.",date:"2026-05-06"},
+  {id:'c16',title:"Directeur de Production H/F",company:"Hermès",location:"France",source:"LinkedIn",score:58,verdict:"cond",salary:"NC",status:"watch",notes:"LinkedIn (01/05). Hermès Maroquinerie = artisanat industriel haut de gamme, process manufacturing manuel/semi-auto. Culture très différente de l'industrie lourde. GO si contexte transformation et structuration confirmés.",date:"2026-05-06"},
+  {id:'c17',title:"Directeur de production H/F",company:"Grant Alexander",location:"France",source:"LinkedIn",score:66,verdict:"cond",salary:"NC",status:"watch",notes:"LinkedIn (27/04). Cabinet executive search sérieux (mid/senior). Client non identifié. Vérifier secteur, taille et scope avant démarche.",date:"2026-05-06"},
+  {id:'c18',title:"Plant Manager",company:"Serioplast",location:"France",source:"LinkedIn",score:64,verdict:"cond",salary:"NC",status:"watch",notes:"LinkedIn (24/04). Serioplast = groupe plasturgie international, packaging rigide. Plant Manager = périmètre potentiellement solide. Vérifier localisation France et taille usine.",date:"2026-05-06"},
+  {id:'c19',title:"Responsable des Opérations F/H",company:"Thales",location:"Gennevilliers (92)",source:"LinkedIn",score:63,verdict:"cond",salary:"NC",status:"watch",notes:"LinkedIn (30/04). Thales = groupe défense/électronique de référence. Responsable Opérations = scope à qualifier (fonctionnel ou opérationnel ?). Vérifier périmètre management.",date:"2026-05-06"},
+  {id:'c20',title:"Senior Operations Manager",company:"Air Liquide",location:"France",source:"LinkedIn",score:62,verdict:"cond",salary:"NC",status:"watch",notes:"LinkedIn (27/04). Air Liquide = groupe industriel gazier de premier plan, process continu 24/7. Senior Ops Manager = scope international probable. Vérifier si rôle France ou expatriation.",date:"2026-05-06"},
+  {id:'c21',title:"COO - Directeur des opérations H/F",company:"ESSP SAS",location:"France",source:"LinkedIn",score:60,verdict:"cond",salary:"NC",status:"watch",notes:"LinkedIn (24/04). ESSP = structure aviation (EGNOS/Galileo), ~200p. COO = plein levier opérationnel. Risque : taille modeste, secteur spatial/services. GO si structuration en cours.",date:"2026-05-06"},
+  {id:'c22',title:"Directeur de production H/F",company:"Antenor (Santé / Sciences de la vie)",location:"France",source:"LinkedIn",score:64,verdict:"cond",salary:"NC",status:"watch",notes:"LinkedIn (01/05). Antenor = cabinet spécialisé Santé & Sciences de la vie. Directeur de production senior — secteur pharma/medtech intéressant si site industriel réel. Vérifier taille et périmètre management.",date:"2026-05-06"},
+  {id:'c23',title:"Manager de Production H/F",company:"Barry Callebaut Group",location:"France",source:"LinkedIn",score:58,verdict:"cond",salary:"NC",status:"watch",notes:"LinkedIn (04/05 — ×2). Barry Callebaut = leader mondial chocolat industriel, process continu, standards qualité alimentaire élevés. Titre Manager = scope à qualifier : directeur ou N-1 ? Vérifier taille site et reporting.",date:"2026-05-06"},
+  {id:'c24',title:"Manager Opérations Manufacturing/Supply Chain F/H",company:"Mews Partners",location:"France",source:"LinkedIn",score:55,verdict:"cond",salary:"NC",status:"watch",notes:"LinkedIn (30/04). Mews Partners = cabinet conseil expert manufacturing. Client non identifié. Manager Opérations = rôle potentiellement fort si mission de transformation. Vérifier si poste opérationnel terrain ou consulting.",date:"2026-05-06"},
+  {id:'c25',title:"Directeur Général F/H",company:"Michael Page International",location:"Pardies (64)",source:"APEC",score:65,verdict:"cond",salary:"NC",status:"watch",notes:"APEC (05/05). Michael Page + DG = scope maximal sur papier. Pardies 64 = Pyrénées-Atlantiques, mobilité contraignante depuis Audincourt. Vérifier secteur et taille de la structure.",date:"2026-05-06"},
+  {id:'c26',title:"Directeur Général Délégué F/H",company:"ELATOS",location:"Montpellier (34)",source:"APEC",score:62,verdict:"cond",salary:"NC",status:"watch",notes:"APEC (05/05). DGD = plein levier opérationnel et stratégique. ELATOS = cabinet, client non identifié. Montpellier = mobilité à confirmer. Vérifier secteur industriel et taille.",date:"2026-05-06"},
+  {id:'c27',title:"Directeur de Business Unit Fourniture Industrielle F/H",company:"ADITO DEVELOPPEMENT",location:"Lyon (69)",source:"APEC",score:60,verdict:"cond",salary:"NC",status:"watch",notes:"APEC (05/05). BU fourniture industrielle = périmètre commercial + opérationnel. Lyon = bassin favorable. Risque : charge commerciale/contractuelle forte = malus potentiel. Vérifier équilibre ops/commerce.",date:"2026-05-06"},
+  {id:'c28',title:"Directeur des Opérations Transport F/H",company:"Turnpoint",location:"Strasbourg (67)",source:"APEC",score:61,verdict:"cond",salary:"NC",status:"watch",notes:"APEC (05/05). Turnpoint = transport/logistique. Directeur des Opérations = périmètre réel mais secteur transport ≠ industrie manufacturière. GO si périmètre multi-sites avec management opérationnel fort.",date:"2026-05-06"},
+  {id:'c29',title:"Directeur Usine F/H",company:"Fed Engineering",location:"Troyes (10)",source:"APEC",score:62,verdict:"cond",salary:"NC",status:"watch",notes:"APEC (05/05). Fed Engineering = cabinet spécialisé industrie. Directeur Usine = titre fort. Troyes = mobilité à confirmer (distance Audincourt ~300km). Vérifier secteur client et taille site.",date:"2026-05-06"},
+  {id:'c30',title:"Directeur Automation & data engineering F/H",company:"Recherche confidentielle",location:"Multi-sites France (Florange, Chaumont, Nîmes...)",source:"APEC",score:52,verdict:"cond",salary:"NC",status:"watch",notes:"APEC (05/05). Offre confidentielle déclinée sur 11 localisations. Automation & data = périmètre tech/digital à qualifier. GO si dimension industrielle ops confirmée.",date:"2026-05-06"},
+  {id:'c31',title:"Resp. site production Freelance",company:"Collective.work",location:"France",source:"Indeed",score:35,verdict:"no",salary:"727€/j",status:"closed",notes:"NO GO : freelance incompatible avec projet durable. Pas de levier management permanent.",date:"2026-05-06"},
+  {id:'c32',title:"Directeur Maintenance & Service Client",company:"CNS Worldwide Executive Search",location:"France",source:"LinkedIn",score:42,verdict:"no",salary:"NC",status:"closed",notes:"NO GO : PME + périmètre Maintenance seul + Service Client = scope fragmenté. Taille structure insuffisante.",date:"2026-05-06"},
+  {id:'c33',title:"Directeur Projets Industriels SQCDME",company:"Agrial",location:"France",source:"LinkedIn",score:44,verdict:"no",salary:"NC",status:"closed",notes:"NO GO : rôle fonctionnel Projets/Méthodes/Standards, pas de responsabilité opérationnelle directe. Profil expert ≠ profil bâtisseur.",date:"2026-05-06"},
+  {id:'c34',title:"Directeur de Site Machines Spéciales Agro",company:"Cofabrik RH",location:"La Tour-du-Pin (38)",source:"Indeed",score:48,verdict:"no",salary:"NC",status:"closed",notes:"NO GO : niche technologique éloignée du profil, taille structure faible, localisation contraignante.",date:"2026-05-06"},
+  {id:'c35',title:"Directeur de production",company:"LOUAULT TECHNOLOGIES & INDUSTRIES",location:"France",source:"Indeed",score:45,verdict:"no",salary:"NC",status:"closed",notes:"NO GO : Directeur de production sans périmètre élargi documenté, PME probable, scope transverse non confirmé.",date:"2026-05-06"},
+  {id:'c36',title:"Responsable de site industriel H/F",company:"Groupe PIMENT (AEROCONTACT)",location:"France",source:"LinkedIn",score:42,verdict:"no",salary:"NC",status:"closed",notes:"NO GO : Responsable de site = scope trop restreint, Groupe PIMENT = structure PME, secteur aéronautique niche.",date:"2026-05-06"},
+  {id:'c37',title:"Operations Maintenance Manager",company:"Prosolia Energy Group",location:"France",source:"LinkedIn",score:35,verdict:"no",salary:"NC",status:"closed",notes:"NO GO : périmètre Maintenance seul, énergies renouvelables = secteur services, pas d'usine industrielle.",date:"2026-05-06"},
+  {id:'c38',title:"Manager Production H/F",company:"IKIWAY Cabinet de Recrutement",location:"France",source:"LinkedIn",score:25,verdict:"no",salary:"38-40K€",status:"closed",notes:"NO GO : salaire affiché 38-40K€ — très en dessous du plancher (95K€). Éliminé immédiatement.",date:"2026-05-06"},
+  {id:'c39',title:"Partner Production Manager (f/m/d)",company:"Freudenberg Sealing Technologies",location:"France",source:"LinkedIn",score:38,verdict:"no",salary:"NC",status:"closed",notes:"NO GO : titre hybride Partner/Manager = périmètre flou, niche technique, poste probablement hors France.",date:"2026-05-06"},
+  {id:'c40',title:"Directeur commercial - Manager Transition",company:"Leaderia",location:"Agen (47)",source:"APEC",score:30,verdict:"no",salary:"NC",status:"closed",notes:"NO GO : commercial/transition = hors profil opérationnel industriel.",date:"2026-05-06"},
+  {id:'c41',title:"Directeur Programmes Défense",company:"CIMEM",location:"Saint-Chély-d'Apcher (48)",source:"APEC",score:35,verdict:"no",salary:"NC",status:"closed",notes:"NO GO : rôle programmes/projets défense, localisation très isolée (48).",date:"2026-05-06"}
+];
+
 
 document.querySelectorAll('.modal-overlay').forEach(m=>{
   m.addEventListener('click', e=>{ if(e.target===m) m.classList.remove('open'); });

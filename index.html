@@ -405,6 +405,156 @@ body {
   .board { grid-template-columns: repeat(2, 1fr); }
   .kpi-grid { grid-template-columns: repeat(2, 1fr); }
 }
+
+/* SCORE CALCULATOR */
+.score-calc {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 14px;
+  margin-bottom: 14px;
+}
+.score-calc-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  cursor: pointer;
+  user-select: none;
+}
+.score-calc-title {
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  color: var(--text3);
+}
+.score-calc-toggle {
+  font-size: 11px;
+  color: var(--text3);
+}
+.score-criteria { display: none; }
+.score-criteria.open { display: block; }
+.criterion {
+  margin-bottom: 10px;
+}
+.criterion-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--text2);
+  margin-bottom: 4px;
+}
+.criterion-pts {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: var(--text3);
+}
+.criterion input[type=range] {
+  width: 100%;
+  height: 4px;
+  accent-color: var(--text);
+  cursor: pointer;
+  border: none;
+  padding: 0;
+  background: none;
+}
+.calc-result {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+}
+.calc-score-val {
+  font-size: 20px;
+  font-weight: 600;
+  font-family: 'DM Mono', monospace;
+}
+.calc-verdict {
+  font-size: 11px;
+  font-weight: 500;
+  padding: 3px 10px;
+  border-radius: 10px;
+}
+.calc-apply-btn {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  padding: 4px 10px;
+  border: 1px solid var(--border2);
+  border-radius: 20px;
+  background: var(--surface);
+  cursor: pointer;
+  color: var(--text2);
+  transition: all .15s;
+}
+.calc-apply-btn:hover { background: var(--text); color: #fff; border-color: var(--text); }
+
+/* MALUS SECTION */
+.malus-section {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--border2);
+}
+.malus-title {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  color: var(--no);
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+.malus-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+  font-size: 12px;
+  color: var(--text2);
+}
+.malus-item input[type=checkbox] {
+  width: 14px;
+  height: 14px;
+  cursor: pointer;
+  accent-color: var(--no);
+  flex-shrink: 0;
+  border: none;
+  padding: 0;
+}
+.malus-val {
+  margin-left: auto;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: var(--no);
+  font-weight: 500;
+}
+
+/* ANTI-BIAS FLAG */
+.bias-flag {
+  display: none;
+  background: #FFF3B0;
+  border: 1px solid #E5C200;
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  font-size: 12px;
+  color: #7B5E00;
+  margin-bottom: 14px;
+  line-height: 1.5;
+}
+.bias-flag.show { display: flex; gap: 8px; align-items: flex-start; }
+.bias-flag-icon { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+
+/* FLAG ON CARD */
+.card-flag {
+  font-size: 10px;
+  padding: 2px 7px;
+  border-radius: 10px;
+  background: #FFF3B0;
+  color: #7B5E00;
+  border: 1px solid #E5C200;
+  white-space: nowrap;
+}
 </style>
 </head>
 <body>
@@ -494,6 +644,137 @@ body {
         </select>
       </div>
     </div>
+    <!-- CALCULATEUR DE SCORE -->
+    <div class="score-calc">
+      <div class="score-calc-header" onclick="toggleCalc()">
+        <span class="score-calc-title">🧮 Calculateur de score /100</span>
+        <span class="score-calc-toggle" id="calc-toggle-lbl">Ouvrir ▾</span>
+      </div>
+      <div class="score-criteria" id="scoreCriteria">
+
+        <div class="criterion">
+          <div class="criterion-label">
+            <span>Adéquation positionnement</span>
+            <span class="criterion-pts" id="lbl-pos">0/20</span>
+          </div>
+          <input type="range" id="c-pos" min="0" max="20" value="0" oninput="calcScore()">
+        </div>
+
+        <div class="criterion">
+          <div class="criterion-label">
+            <span>Séniorité et périmètre réel</span>
+            <span class="criterion-pts" id="lbl-sen">0/15</span>
+          </div>
+          <input type="range" id="c-sen" min="0" max="15" value="0" oninput="calcScore()">
+        </div>
+
+        <div class="criterion">
+          <div class="criterion-label">
+            <span>Leviers opérationnels réels</span>
+            <span class="criterion-pts" id="lbl-lev">0/15</span>
+          </div>
+          <input type="range" id="c-lev" min="0" max="15" value="0" oninput="calcScore()">
+        </div>
+
+        <div class="criterion">
+          <div class="criterion-label">
+            <span>Crédibilité sectorielle</span>
+            <span class="criterion-pts" id="lbl-sec">0/10</span>
+          </div>
+          <input type="range" id="c-sec" min="0" max="10" value="0" oninput="calcScore()">
+        </div>
+
+        <div class="criterion">
+          <div class="criterion-label">
+            <span>Compatibilité contraintes personnelles</span>
+            <span class="criterion-pts" id="lbl-con">0/15</span>
+          </div>
+          <input type="range" id="c-con" min="0" max="15" value="0" oninput="calcScore()">
+        </div>
+
+        <div class="criterion">
+          <div class="criterion-label">
+            <span>Profil de risque caché</span>
+            <span class="criterion-pts" id="lbl-ris">0/10</span>
+          </div>
+          <input type="range" id="c-ris" min="0" max="10" value="0" oninput="calcScore()">
+        </div>
+
+        <div class="criterion">
+          <div class="criterion-label">
+            <span>Défendabilité en entretien</span>
+            <span class="criterion-pts" id="lbl-def">0/10</span>
+          </div>
+          <input type="range" id="c-def" min="0" max="10" value="0" oninput="calcScore()">
+        </div>
+
+        <div class="criterion">
+          <div class="criterion-label">
+            <span>Valeur stratégique trajectoire</span>
+            <span class="criterion-pts" id="lbl-tra">0/5</span>
+          </div>
+          <input type="range" id="c-tra" min="0" max="5" value="0" oninput="calcScore()">
+        </div>
+
+        <!-- MALUS -->
+        <div class="malus-section">
+          <div class="malus-title">⚠ Malus critères critiques</div>
+
+          <div class="malus-item">
+            <input type="checkbox" id="m-sector" onchange="calcScore()">
+            <label for="m-sector">Secteur hors cibles (déchets, services, non-industriel)</label>
+            <span class="malus-val">−8</span>
+          </div>
+
+          <div class="malus-item">
+            <input type="checkbox" id="m-commercial" onchange="calcScore()">
+            <label for="m-commercial">Charge commerciale / contractuelle significative</label>
+            <span class="malus-val">−7</span>
+          </div>
+
+          <div class="malus-item">
+            <input type="checkbox" id="m-directeur-site" onchange="calcScore()">
+            <label for="m-directeur-site">Directeur de site unique dans grand groupe (autonomie encadrée)</label>
+            <span class="malus-val">−6</span>
+          </div>
+
+          <div class="malus-item">
+            <input type="checkbox" id="m-perimetre" onchange="calcScore()">
+            <label for="m-perimetre">Périmètre flou ou titre gonflé sur scope faible</label>
+            <span class="malus-val">−8</span>
+          </div>
+
+          <div class="malus-item">
+            <input type="checkbox" id="m-salaire" onchange="calcScore()">
+            <label for="m-salaire">Package probablement sous plancher (95K€ fixe)</label>
+            <span class="malus-val">−10</span>
+          </div>
+
+          <div class="malus-item">
+            <input type="checkbox" id="m-mobilite" onchange="calcScore()">
+            <label for="m-mobilite">Mobilité géographique incompatible</label>
+            <span class="malus-val">−12</span>
+          </div>
+        </div>
+
+        <div class="calc-result">
+          <div>
+            <div style="font-size:11px;color:var(--text3);margin-bottom:3px">Score calculé</div>
+            <span class="calc-score-val" id="calcScoreVal">0</span>
+            <span style="font-size:13px;color:var(--text3)">/100</span>
+          </div>
+          <span class="calc-verdict" id="calcVerdictBadge"></span>
+          <button class="calc-apply-btn" onclick="applyCalcScore()">Appliquer →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- FLAG ANTI-BIAIS -->
+    <div class="bias-flag" id="biasFlagForm">
+      <span class="bias-flag-icon">⚠</span>
+      <span id="biasFlagMsg"></span>
+    </div>
+
     <div class="field"><label>Notes / Risques détectés</label>
       <textarea id="f-notes" placeholder="Risques, questions à poser, contexte..."></textarea>
     </div>
@@ -652,6 +933,7 @@ function renderBoard() {
             <span class="card-source">${c.source}</span>
           </div>
           ${c.score?`<div class="score-bar"><div class="score-bar-fill" style="width:${sc}%;background:${SCORE_COLORS(sc)}"></div></div>`:''}
+          ${hasBiasRisk(c) ? `<div style="margin-top:6px"><span class="card-flag">⚠ Vérifier biais attractivité</span></div>` : ''}
         </div>`;
       }).join('')}
       <button class="add-btn" onclick="openAdd('${col.id}')">+ Ajouter</button>
@@ -839,6 +1121,137 @@ function showToast(msg) {
   t.classList.add('show');
   setTimeout(()=>t.classList.remove('show'), 2200);
 }
+
+// ── SCORE CALCULATOR ────────────────────────────────────────────
+
+const CRITERIA = ['pos','sen','lev','sec','con','ris','def','tra'];
+const CRITERIA_MAX = {pos:20,sen:15,lev:15,sec:10,con:15,ris:10,def:10,tra:5};
+const MALUS = {
+  sector: {val:8, label:'Secteur hors cible'},
+  commercial: {val:7, label:'Charge commerciale/contractuelle'},
+  'directeur-site': {val:6, label:'Dir. site unique grand groupe'},
+  perimetre: {val:8, label:'Périmètre flou/gonflé'},
+  salaire: {val:10, label:'Package sous plancher'},
+  mobilite: {val:12, label:'Mobilité incompatible'}
+};
+
+// Mots-clés déclencheurs de biais attractivité dans les notes
+const BIAS_KEYWORDS = [
+  'veolia','suez','engie','saint-gobain','michelin','airbus','schneider',
+  'directeur général','dg ','groupe international','leader mondial',
+  'avenant','développement commercial','fidéliser','portefeuille client',
+  'déchets','valorisation','incinér','thermique industriel'
+];
+
+function hasBiasRisk(c) {
+  const sc = parseInt(c.score)||0;
+  if (sc < 58 || sc > 82) return false; // hors zone de risque
+  if (c.verdict === 'no') return false;
+  const text = ((c.notes||'') + ' ' + (c.company||'') + ' ' + (c.title||'')).toLowerCase();
+  return BIAS_KEYWORDS.some(kw => text.includes(kw));
+}
+
+let calcOpen = false;
+
+function toggleCalc() {
+  calcOpen = !calcOpen;
+  document.getElementById('scoreCriteria').classList.toggle('open', calcOpen);
+  document.getElementById('calc-toggle-lbl').textContent = calcOpen ? 'Fermer ▴' : 'Ouvrir ▾';
+  if (calcOpen) calcScore();
+}
+
+function calcScore() {
+  // Base criteria
+  let base = CRITERIA.reduce((sum, id) => {
+    const el = document.getElementById('c-' + id);
+    const val = el ? parseInt(el.value) : 0;
+    document.getElementById('lbl-' + id).textContent = val + '/' + CRITERIA_MAX[id];
+    return sum + val;
+  }, 0);
+
+  // Malus
+  let malusTotal = 0;
+  let malusLabels = [];
+  Object.entries(MALUS).forEach(([id, m]) => {
+    const el = document.getElementById('m-' + id);
+    if (el && el.checked) {
+      malusTotal += m.val;
+      malusLabels.push(m.label);
+    }
+  });
+
+  const score = Math.max(0, base - malusTotal);
+  document.getElementById('calcScoreVal').textContent = score;
+
+  // Verdict auto
+  const badge = document.getElementById('calcVerdictBadge');
+  if (score >= 75) {
+    badge.textContent = 'GO';
+    badge.className = 'calc-verdict badge-go';
+  } else if (score >= 60) {
+    badge.textContent = 'GO sous conditions';
+    badge.className = 'calc-verdict badge-cond';
+  } else {
+    badge.textContent = 'NO GO';
+    badge.className = 'calc-verdict badge-no';
+  }
+
+  // Anti-biais flag dans le formulaire
+  const flag = document.getElementById('biasFlagForm');
+  const company = (document.getElementById('f-company')?.value||'').toLowerCase();
+  const title = (document.getElementById('f-title')?.value||'').toLowerCase();
+  const notes = (document.getElementById('f-notes')?.value||'').toLowerCase();
+  const contextText = company + ' ' + title + ' ' + notes;
+  const hasKeyword = BIAS_KEYWORDS.some(kw => contextText.includes(kw));
+  const inBiasZone = score >= 58 && score <= 82;
+
+  if (inBiasZone && hasKeyword && malusTotal > 0) {
+    const msg = `Biais attractivité probable — score ${score}/100 en zone frontière avec ${malusTotal} pts de malus (${malusLabels.join(', ')}). Vérifier le périmètre réel avant de postuler.`;
+    document.getElementById('biasFlagMsg').textContent = msg;
+    flag.classList.add('show');
+  } else if (inBiasZone && malusTotal > 0) {
+    const msg = `Score ${score}/100 en zone frontière avec ${malusTotal} pts de malus actifs. Confirmer les points de fragilité avant de valider.`;
+    document.getElementById('biasFlagMsg').textContent = msg;
+    flag.classList.add('show');
+  } else {
+    flag.classList.remove('show');
+  }
+}
+
+function applyCalcScore() {
+  const score = document.getElementById('calcScoreVal').textContent;
+  document.getElementById('f-score').value = score;
+  const sc = parseInt(score);
+  const verdict = sc >= 75 ? 'go' : sc >= 60 ? 'cond' : 'no';
+  document.getElementById('f-verdict').value = verdict;
+
+  // Reset calculateur
+  CRITERIA.forEach(id => {
+    const el = document.getElementById('c-' + id);
+    if (el) el.value = 0;
+    const lbl = document.getElementById('lbl-' + id);
+    if (lbl) lbl.textContent = '0/' + CRITERIA_MAX[id];
+  });
+  Object.keys(MALUS).forEach(id => {
+    const el = document.getElementById('m-' + id);
+    if (el) el.checked = false;
+  });
+  calcOpen = false;
+  document.getElementById('scoreCriteria').classList.remove('open');
+  document.getElementById('calc-toggle-lbl').textContent = 'Ouvrir ▾';
+  document.getElementById('biasFlagForm').classList.remove('show');
+  document.getElementById('calcScoreVal').textContent = '0';
+  document.getElementById('calcVerdictBadge').textContent = '';
+  document.getElementById('calcVerdictBadge').className = 'calc-verdict';
+}
+
+// Recalc flag quand les champs changent
+['f-company','f-title','f-notes'].forEach(id => {
+  const el = document.getElementById(id);
+  if (el) el.addEventListener('input', () => { if(calcOpen) calcScore(); });
+});
+
+// ── END SCORE CALCULATOR ─────────────────────────────────────────
 
 document.querySelectorAll('.modal-overlay').forEach(m=>{
   m.addEventListener('click', e=>{ if(e.target===m) m.classList.remove('open'); });

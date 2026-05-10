@@ -7,315 +7,78 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #F7F6F3;
-  --surface: #FFFFFF;
-  --surface2: #F0EEE9;
-  --border: #E2DED8;
-  --border2: #CBC7C0;
-  --text: #1A1916;
-  --text2: #6B6860;
-  --text3: #9E9B95;
+  --bg: #F7F6F3; --surface: #FFFFFF; --surface2: #F0EEE9;
+  --border: #E2DED8; --border2: #CBC7C0;
+  --text: #1A1916; --text2: #6B6860; --text3: #9E9B95;
   --go: #2D6A4F; --go-bg: #D8F3DC;
   --cond: #7B5E00; --cond-bg: #FFF3B0;
   --no: #9B2226; --no-bg: #FFE3E3;
   --doc: #1B4F72; --doc-bg: #D6EAF8;
   --blue: #1B4F72; --blue-bg: #D6EAF8;
-  --amber: #7B5E00; --amber-bg: #FFF3B0;
-  --radius: 10px;
-  --radius-sm: 6px;
-  --shadow: 0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
-  --shadow-md: 0 4px 12px rgba(0,0,0,.08), 0 2px 4px rgba(0,0,0,.04);
+  --radius: 10px; --radius-sm: 6px;
+  --shadow: 0 1px 3px rgba(0,0,0,.06),0 1px 2px rgba(0,0,0,.04);
+  --shadow-md: 0 4px 12px rgba(0,0,0,.08),0 2px 4px rgba(0,0,0,.04);
 }
-
 * { box-sizing: border-box; margin: 0; padding: 0; }
-
-body {
-  font-family: 'DM Sans', sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  min-height: 100vh;
-  font-size: 14px;
-}
-
-/* TOPBAR */
-.topbar {
-  background: var(--surface);
-  border-bottom: 1px solid var(--border);
-  padding: 0 24px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 56px;
-  position: sticky;
-  top: 0;
-  z-index: 50;
-}
-.logo {
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--text);
-  letter-spacing: -.3px;
-}
+body { font-family: 'DM Sans',sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; font-size: 14px; }
+.topbar { background: var(--surface); border-bottom: 1px solid var(--border); padding: 0 24px; display: flex; align-items: center; justify-content: space-between; height: 56px; position: sticky; top: 0; z-index: 50; }
+.logo { font-size: 15px; font-weight: 600; color: var(--text); letter-spacing: -.3px; }
 .logo span { color: var(--text3); font-weight: 400; }
 .topbar-actions { display: flex; gap: 8px; align-items: center; }
-
-/* MAIN */
 .main { padding: 24px; max-width: 1400px; margin: 0 auto; }
-
-/* KPIs */
-.kpi-grid {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 10px;
-  margin-bottom: 24px;
-}
-.kpi-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 16px;
-  box-shadow: var(--shadow);
-}
+.kpi-grid { display: grid; grid-template-columns: repeat(5,1fr); gap: 10px; margin-bottom: 24px; }
+.kpi-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; box-shadow: var(--shadow); }
 .kpi-label { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: .6px; margin-bottom: 6px; }
 .kpi-val { font-size: 28px; font-weight: 600; color: var(--text); line-height: 1; margin-bottom: 4px; }
 .kpi-sub { font-size: 11px; color: var(--text3); }
 .kpi-bar { height: 3px; background: var(--border); border-radius: 2px; margin-top: 10px; overflow: hidden; }
 .kpi-bar-fill { height: 100%; background: var(--text2); border-radius: 2px; transition: width .4s; }
-
-/* FILTERS */
-.filters {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  margin-bottom: 20px;
-  flex-wrap: wrap;
-}
+.filters { display: flex; gap: 8px; align-items: center; margin-bottom: 20px; flex-wrap: wrap; }
 .filter-label { font-size: 12px; color: var(--text3); }
-.filter-btn {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 12px;
-  padding: 5px 12px;
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  background: var(--surface);
-  color: var(--text2);
-  cursor: pointer;
-  transition: all .15s;
-}
-.filter-btn:hover, .filter-btn.active {
-  background: var(--text);
-  color: #fff;
-  border-color: var(--text);
-}
-
-/* BOARD */
-.board {
-  display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 12px;
-  align-items: start;
-}
-.col {
-  background: var(--surface2);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 12px;
-  min-height: 200px;
-}
-.col-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 12px;
-  padding-bottom: 10px;
-  border-bottom: 1px solid var(--border);
-}
-.col-dot {
-  width: 8px; height: 8px;
-  border-radius: 50%;
-  margin-right: 7px;
-  flex-shrink: 0;
-}
+.filter-btn { font-family: 'DM Sans',sans-serif; font-size: 12px; padding: 5px 12px; border: 1px solid var(--border); border-radius: 20px; background: var(--surface); color: var(--text2); cursor: pointer; transition: all .15s; }
+.filter-btn:hover,.filter-btn.active { background: var(--text); color: #fff; border-color: var(--text); }
+.board { display: grid; grid-template-columns: repeat(5,minmax(0,1fr)); gap: 12px; align-items: start; }
+.col { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px; min-height: 200px; }
+.col-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+.col-dot { width: 8px; height: 8px; border-radius: 50%; margin-right: 7px; flex-shrink: 0; }
 .col-title-wrap { display: flex; align-items: center; }
 .col-title { font-size: 12px; font-weight: 500; color: var(--text2); }
-.col-count {
-  font-size: 11px;
-  font-family: 'DM Mono', monospace;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 1px 8px;
-  color: var(--text3);
-}
-
-/* CARD */
-.card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  padding: 12px;
-  margin-bottom: 8px;
-  cursor: pointer;
-  transition: box-shadow .15s, border-color .15s, transform .1s;
-  box-shadow: var(--shadow);
-}
-.card:hover {
-  border-color: var(--border2);
-  box-shadow: var(--shadow-md);
-  transform: translateY(-1px);
-}
+.col-count { font-size: 11px; font-family: 'DM Mono',monospace; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1px 8px; color: var(--text3); }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px; margin-bottom: 8px; cursor: pointer; transition: box-shadow .15s,border-color .15s,transform .1s; box-shadow: var(--shadow); }
+.card:hover { border-color: var(--border2); box-shadow: var(--shadow-md); transform: translateY(-1px); }
 .card-title { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 3px; line-height: 1.35; }
 .card-company { font-size: 12px; color: var(--text2); margin-bottom: 8px; }
 .card-footer { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
-.badge {
-  font-size: 10px;
-  font-weight: 500;
-  padding: 2px 8px;
-  border-radius: 10px;
-  white-space: nowrap;
-}
+.badge { font-size: 10px; font-weight: 500; padding: 2px 8px; border-radius: 10px; white-space: nowrap; }
 .badge-go { background: var(--go-bg); color: var(--go); }
 .badge-cond { background: var(--cond-bg); color: var(--cond); }
 .badge-no { background: var(--no-bg); color: var(--no); }
 .badge-doc { background: var(--doc-bg); color: var(--doc); }
-.card-score {
-  font-size: 11px;
-  font-family: 'DM Mono', monospace;
-  color: var(--text3);
-}
-.card-source {
-  font-size: 10px;
-  color: var(--text3);
-  margin-left: auto;
-}
-.score-bar {
-  height: 2px;
-  background: var(--border);
-  border-radius: 1px;
-  margin-top: 8px;
-  overflow: hidden;
-}
-.score-bar-fill {
-  height: 100%;
-  border-radius: 1px;
-  transition: width .3s;
-}
-
-/* ADD BUTTON */
-.add-btn {
-  width: 100%;
-  padding: 8px;
-  border: 1px dashed var(--border2);
-  border-radius: var(--radius-sm);
-  background: transparent;
-  color: var(--text3);
-  font-size: 12px;
-  font-family: 'DM Sans', sans-serif;
-  cursor: pointer;
-  transition: all .15s;
-  margin-top: 4px;
-}
-.add-btn:hover {
-  background: var(--surface);
-  color: var(--text2);
-  border-color: var(--border2);
-}
-
-/* BUTTONS */
-.btn {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 13px;
-  padding: 8px 16px;
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  transition: all .15s;
-  font-weight: 500;
-}
-.btn-primary {
-  background: var(--text);
-  color: #fff;
-  border: none;
-}
+.card-score { font-size: 11px; font-family: 'DM Mono',monospace; color: var(--text3); }
+.card-source { font-size: 10px; color: var(--text3); margin-left: auto; }
+.score-bar { height: 2px; background: var(--border); border-radius: 1px; margin-top: 8px; overflow: hidden; }
+.score-bar-fill { height: 100%; border-radius: 1px; transition: width .3s; }
+.add-btn { width: 100%; padding: 8px; border: 1px dashed var(--border2); border-radius: var(--radius-sm); background: transparent; color: var(--text3); font-size: 12px; font-family: 'DM Sans',sans-serif; cursor: pointer; transition: all .15s; margin-top: 4px; }
+.add-btn:hover { background: var(--surface); color: var(--text2); border-color: var(--border2); }
+.btn { font-family: 'DM Sans',sans-serif; font-size: 13px; padding: 8px 16px; border-radius: var(--radius-sm); cursor: pointer; transition: all .15s; font-weight: 500; }
+.btn-primary { background: var(--text); color: #fff; border: none; }
 .btn-primary:hover { background: #333; }
-.btn-secondary {
-  background: transparent;
-  color: var(--text);
-  border: 1px solid var(--border2);
-}
+.btn-secondary { background: transparent; color: var(--text); border: 1px solid var(--border2); }
 .btn-secondary:hover { background: var(--surface2); }
-.btn-danger {
-  background: var(--no-bg);
-  color: var(--no);
-  border: none;
-  margin-right: auto;
-}
-.btn-sm {
-  font-size: 11px;
-  padding: 5px 12px;
-  border-radius: 20px;
-}
-
-/* MODAL */
-.modal-overlay {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(26,25,22,.45);
-  z-index: 100;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-}
+.btn-danger { background: var(--no-bg); color: var(--no); border: none; margin-right: auto; }
+.btn-sm { font-size: 11px; padding: 5px 12px; border-radius: 20px; }
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(26,25,22,.45); z-index: 100; align-items: center; justify-content: center; padding: 20px; }
 .modal-overlay.open { display: flex; }
-.modal {
-  background: var(--surface);
-  border-radius: var(--radius);
-  border: 1px solid var(--border);
-  padding: 28px;
-  width: min(520px, 100%);
-  max-height: 90vh;
-  overflow-y: auto;
-  box-shadow: var(--shadow-md);
-}
-.modal h3 {
-  font-size: 17px;
-  font-weight: 600;
-  margin-bottom: 20px;
-  color: var(--text);
-}
+.modal { background: var(--surface); border-radius: var(--radius); border: 1px solid var(--border); padding: 28px; width: min(520px,100%); max-height: 90vh; overflow-y: auto; box-shadow: var(--shadow-md); }
+.modal h3 { font-size: 17px; font-weight: 600; margin-bottom: 20px; color: var(--text); }
 .field { margin-bottom: 14px; }
-.field label {
-  display: block;
-  font-size: 11px;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: .5px;
-  color: var(--text3);
-  margin-bottom: 5px;
-}
-.field input, .field select, .field textarea {
-  width: 100%;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 14px;
-  padding: 9px 12px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  background: var(--surface);
-  color: var(--text);
-  outline: none;
-  transition: border-color .15s;
-}
-.field input:focus, .field select:focus, .field textarea:focus {
-  border-color: var(--border2);
-  box-shadow: 0 0 0 3px rgba(26,25,22,.06);
-}
+.field label { display: block; font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: .5px; color: var(--text3); margin-bottom: 5px; }
+.field input,.field select,.field textarea { width: 100%; font-family: 'DM Sans',sans-serif; font-size: 14px; padding: 9px 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--surface); color: var(--text); outline: none; transition: border-color .15s; }
+.field input:focus,.field select:focus,.field textarea:focus { border-color: var(--border2); box-shadow: 0 0 0 3px rgba(26,25,22,.06); }
 .field textarea { height: 90px; resize: vertical; }
 .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 20px; }
-
-/* DETAIL */
 .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
-.detail-item {}
 .detail-label { font-size: 11px; text-transform: uppercase; letter-spacing: .5px; color: var(--text3); margin-bottom: 4px; }
 .detail-val { font-size: 14px; color: var(--text); }
 .detail-divider { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
@@ -323,75 +86,20 @@ body {
 .move-section { margin: 16px 0; }
 .move-section .detail-label { margin-bottom: 8px; }
 .move-btns { display: flex; gap: 6px; flex-wrap: wrap; }
-.move-btn {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 11px;
-  padding: 5px 12px;
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  background: transparent;
-  cursor: pointer;
-  color: var(--text2);
-  transition: all .15s;
-}
+.move-btn { font-family: 'DM Sans',sans-serif; font-size: 11px; padding: 5px 12px; border: 1px solid var(--border); border-radius: 20px; background: transparent; cursor: pointer; color: var(--text2); transition: all .15s; }
 .move-btn:hover { background: var(--surface2); border-color: var(--border2); }
-
-/* EMPTY STATE */
-.empty {
-  text-align: center;
-  padding: 24px 12px;
-  color: var(--text3);
-  font-size: 12px;
-  line-height: 1.6;
-}
-
-/* TOAST */
-.toast {
-  position: fixed;
-  bottom: 24px;
-  right: 24px;
-  background: var(--text);
-  color: #fff;
-  padding: 10px 16px;
-  border-radius: var(--radius-sm);
-  font-size: 13px;
-  z-index: 200;
-  opacity: 0;
-  transform: translateY(8px);
-  transition: all .2s;
-  pointer-events: none;
-}
+.empty { text-align: center; padding: 24px 12px; color: var(--text3); font-size: 12px; line-height: 1.6; }
+.toast { position: fixed; bottom: 24px; right: 24px; background: var(--text); color: #fff; padding: 10px 16px; border-radius: var(--radius-sm); font-size: 13px; z-index: 200; opacity: 0; transform: translateY(8px); transition: all .2s; pointer-events: none; }
 .toast.show { opacity: 1; transform: translateY(0); }
-
-/* STATS VIEW */
-.stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px; }
-.stat-block {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 20px;
-}
+.stats-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-bottom: 24px; }
+.stat-block { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; }
 .stat-block h4 { font-size: 12px; color: var(--text3); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 16px; }
 .stat-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-size: 13px; }
 .stat-row-label { color: var(--text2); }
-.stat-row-val { font-weight: 500; color: var(--text); font-family: 'DM Mono', monospace; font-size: 12px; }
-
-/* VIEW TOGGLE */
+.stat-row-val { font-weight: 500; color: var(--text); font-family: 'DM Mono',monospace; font-size: 12px; }
 .view-toggle { display: flex; gap: 4px; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 3px; }
-.view-btn {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 12px;
-  padding: 5px 12px;
-  border: none;
-  border-radius: 5px;
-  background: transparent;
-  color: var(--text3);
-  cursor: pointer;
-  transition: all .15s;
-}
+.view-btn { font-family: 'DM Sans',sans-serif; font-size: 12px; padding: 5px 12px; border: none; border-radius: 5px; background: transparent; color: var(--text3); cursor: pointer; transition: all .15s; }
 .view-btn.active { background: var(--surface); color: var(--text); box-shadow: var(--shadow); }
-
-/* LIST VIEW */
 .list-view { display: none; }
 .list-view.active { display: block; }
 .board-view.hidden { display: none; }
@@ -400,161 +108,31 @@ body {
 .list-table td { font-size: 13px; padding: 11px 14px; border-bottom: 1px solid var(--border); color: var(--text); }
 .list-table tr:last-child td { border-bottom: none; }
 .list-table tr:hover td { background: var(--surface2); cursor: pointer; }
-
-@media (max-width: 900px) {
-  .board { grid-template-columns: repeat(2, 1fr); }
-  .kpi-grid { grid-template-columns: repeat(2, 1fr); }
-}
-
-/* SCORE CALCULATOR */
-.score-calc {
-  background: var(--surface2);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  padding: 14px;
-  margin-bottom: 14px;
-}
-.score-calc-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 12px;
-  cursor: pointer;
-  user-select: none;
-}
-.score-calc-title {
-  font-size: 11px;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: .5px;
-  color: var(--text3);
-}
-.score-calc-toggle {
-  font-size: 11px;
-  color: var(--text3);
-}
+@media (max-width:900px) { .board { grid-template-columns: repeat(2,1fr); } .kpi-grid { grid-template-columns: repeat(2,1fr); } }
+.score-calc { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px; margin-bottom: 14px; }
+.score-calc-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; cursor: pointer; user-select: none; }
+.score-calc-title { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: .5px; color: var(--text3); }
+.score-calc-toggle { font-size: 11px; color: var(--text3); }
 .score-criteria { display: none; }
 .score-criteria.open { display: block; }
-.criterion {
-  margin-bottom: 10px;
-}
-.criterion-label {
-  display: flex;
-  justify-content: space-between;
-  font-size: 12px;
-  color: var(--text2);
-  margin-bottom: 4px;
-}
-.criterion-pts {
-  font-family: 'DM Mono', monospace;
-  font-size: 11px;
-  color: var(--text3);
-}
-.criterion input[type=range] {
-  width: 100%;
-  height: 4px;
-  accent-color: var(--text);
-  cursor: pointer;
-  border: none;
-  padding: 0;
-  background: none;
-}
-.calc-result {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: 12px;
-  padding-top: 10px;
-  border-top: 1px solid var(--border);
-}
-.calc-score-val {
-  font-size: 20px;
-  font-weight: 600;
-  font-family: 'DM Mono', monospace;
-}
-.calc-verdict {
-  font-size: 11px;
-  font-weight: 500;
-  padding: 3px 10px;
-  border-radius: 10px;
-}
-.calc-apply-btn {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 11px;
-  padding: 4px 10px;
-  border: 1px solid var(--border2);
-  border-radius: 20px;
-  background: var(--surface);
-  cursor: pointer;
-  color: var(--text2);
-  transition: all .15s;
-}
+.criterion { margin-bottom: 10px; }
+.criterion-label { display: flex; justify-content: space-between; font-size: 12px; color: var(--text2); margin-bottom: 4px; }
+.criterion-pts { font-family: 'DM Mono',monospace; font-size: 11px; color: var(--text3); }
+.criterion input[type=range] { width: 100%; height: 4px; accent-color: var(--text); cursor: pointer; border: none; padding: 0; background: none; }
+.calc-result { display: flex; align-items: center; justify-content: space-between; margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--border); }
+.calc-score-val { font-size: 20px; font-weight: 600; font-family: 'DM Mono',monospace; }
+.calc-verdict { font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 10px; }
+.calc-apply-btn { font-family: 'DM Sans',sans-serif; font-size: 11px; padding: 4px 10px; border: 1px solid var(--border2); border-radius: 20px; background: var(--surface); cursor: pointer; color: var(--text2); transition: all .15s; }
 .calc-apply-btn:hover { background: var(--text); color: #fff; border-color: var(--text); }
-
-/* MALUS SECTION */
-.malus-section {
-  margin-top: 10px;
-  padding-top: 10px;
-  border-top: 1px dashed var(--border2);
-}
-.malus-title {
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: .5px;
-  color: var(--no);
-  margin-bottom: 8px;
-  font-weight: 500;
-}
-.malus-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 6px;
-  font-size: 12px;
-  color: var(--text2);
-}
-.malus-item input[type=checkbox] {
-  width: 14px;
-  height: 14px;
-  cursor: pointer;
-  accent-color: var(--no);
-  flex-shrink: 0;
-  border: none;
-  padding: 0;
-}
-.malus-val {
-  margin-left: auto;
-  font-family: 'DM Mono', monospace;
-  font-size: 11px;
-  color: var(--no);
-  font-weight: 500;
-}
-
-/* ANTI-BIAS FLAG */
-.bias-flag {
-  display: none;
-  background: #FFF3B0;
-  border: 1px solid #E5C200;
-  border-radius: var(--radius-sm);
-  padding: 10px 12px;
-  font-size: 12px;
-  color: #7B5E00;
-  margin-bottom: 14px;
-  line-height: 1.5;
-}
+.malus-section { margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--border2); }
+.malus-title { font-size: 11px; text-transform: uppercase; letter-spacing: .5px; color: var(--no); margin-bottom: 8px; font-weight: 500; }
+.malus-item { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; font-size: 12px; color: var(--text2); }
+.malus-item input[type=checkbox] { width: 14px; height: 14px; cursor: pointer; accent-color: var(--no); flex-shrink: 0; border: none; padding: 0; }
+.malus-val { margin-left: auto; font-family: 'DM Mono',monospace; font-size: 11px; color: var(--no); font-weight: 500; }
+.bias-flag { display: none; background: #FFF3B0; border: 1px solid #E5C200; border-radius: var(--radius-sm); padding: 10px 12px; font-size: 12px; color: #7B5E00; margin-bottom: 14px; line-height: 1.5; }
 .bias-flag.show { display: flex; gap: 8px; align-items: flex-start; }
 .bias-flag-icon { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
-
-/* FLAG ON CARD */
-.card-flag {
-  font-size: 10px;
-  padding: 2px 7px;
-  border-radius: 10px;
-  background: #FFF3B0;
-  color: #7B5E00;
-  border: 1px solid #E5C200;
-  white-space: nowrap;
-}
+.card-flag { font-size: 10px; padding: 2px 7px; border-radius: 10px; background: #FFF3B0; color: #7B5E00; border: 1px solid #E5C200; white-space: nowrap; }
 </style>
 </head>
 <body>
@@ -578,35 +156,27 @@ body {
 
 <div class="main">
   <div class="kpi-grid" id="kpis"></div>
-
   <div class="filters">
     <span class="filter-label">Filtrer :</span>
-    <button class="filter-btn active" onclick="setFilter('all', this)">Toutes</button>
-    <button class="filter-btn" onclick="setFilter('go', this)">GO</button>
-    <button class="filter-btn" onclick="setFilter('cond', this)">GO sous cond.</button>
-    <button class="filter-btn" onclick="setFilter('no', this)">NO GO</button>
-    <button class="filter-btn" onclick="setFilter('LinkedIn', this)">LinkedIn</button>
-    <button class="filter-btn" onclick="setFilter('Indeed', this)">Indeed</button>
-    <button class="filter-btn" onclick="setFilter('APEC', this)">APEC</button>
+    <button class="filter-btn active" onclick="setFilter('all',this)">Toutes</button>
+    <button class="filter-btn" onclick="setFilter('go',this)">GO</button>
+    <button class="filter-btn" onclick="setFilter('cond',this)">GO sous cond.</button>
+    <button class="filter-btn" onclick="setFilter('no',this)">NO GO</button>
+    <button class="filter-btn" onclick="setFilter('LinkedIn',this)">LinkedIn</button>
+    <button class="filter-btn" onclick="setFilter('Indeed',this)">Indeed</button>
+    <button class="filter-btn" onclick="setFilter('APEC',this)">APEC</button>
   </div>
-
-  <div id="boardWrap" class="board-view">
-    <div class="board" id="board"></div>
-  </div>
-
+  <div id="boardWrap" class="board-view"><div class="board" id="board"></div></div>
   <div id="listWrap" class="list-view">
     <table class="list-table" id="listTable">
       <thead><tr>
         <th>Poste</th><th>Entreprise</th><th>Localisation</th>
-        <th>Source</th><th>Score</th><th>Verdict</th><th>Statut</th><th>Date</th>
+        <th>Source</th><th>Score</th><th>Verdict</th><th>Statut</th><th>Date</th><th>Lien offre</th>
       </tr></thead>
       <tbody id="listBody"></tbody>
     </table>
   </div>
-
-  <div id="statsWrap" class="list-view">
-    <div class="stats-grid" id="statsContent"></div>
-  </div>
+  <div id="statsWrap" class="list-view"><div class="stats-grid" id="statsContent"></div></div>
 </div>
 
 <!-- ADD MODAL -->
@@ -620,169 +190,58 @@ body {
     <div class="field-row">
       <div class="field"><label>Localisation</label><input id="f-location" placeholder="Lyon (69)"></div>
       <div class="field"><label>Source</label>
-        <select id="f-source">
-          <option>LinkedIn</option><option>Indeed</option><option>APEC</option>
-          <option>Headhunter</option><option>Réseau</option><option>Autre</option>
-        </select>
+        <select id="f-source"><option>LinkedIn</option><option>Indeed</option><option>APEC</option><option>Headhunter</option><option>Réseau</option><option>Autre</option></select>
       </div>
+    </div>
+    <!-- CHAMP LIEN OFFRE — NOUVEAU -->
+    <div class="field">
+      <label>Lien offre</label>
+      <input id="f-url" placeholder="https://www.apec.fr/candidat/..." style="font-size:12px">
     </div>
     <div class="field-row">
       <div class="field"><label>Score /100</label><input id="f-score" type="number" min="0" max="100" placeholder="78"></div>
       <div class="field"><label>Verdict</label>
-        <select id="f-verdict">
-          <option value="go">GO</option>
-          <option value="cond">GO sous conditions</option>
-          <option value="no">NO GO</option>
-          <option value="doc">À documenter</option>
-        </select>
+        <select id="f-verdict"><option value="go">GO</option><option value="cond">GO sous conditions</option><option value="no">NO GO</option><option value="doc">À documenter</option></select>
       </div>
     </div>
     <div class="field-row">
       <div class="field"><label>Salaire / Package</label><input id="f-salary" placeholder="100-120K€"></div>
       <div class="field"><label>Statut initial</label>
-        <select id="f-status">
-          <option value="watch">Veille</option>
-          <option value="applied">Candidaté</option>
-          <option value="interview">Entretien</option>
-          <option value="offer">Offre</option>
-          <option value="closed">Clôturé</option>
-        </select>
+        <select id="f-status"><option value="watch">Veille</option><option value="applied">Candidaté</option><option value="interview">Entretien</option><option value="offer">Offre</option><option value="closed">Clôturé</option></select>
       </div>
     </div>
-    <!-- CALCULATEUR DE SCORE -->
     <div class="score-calc">
       <div class="score-calc-header" onclick="toggleCalc()">
         <span class="score-calc-title">🧮 Calculateur de score /100</span>
         <span class="score-calc-toggle" id="calc-toggle-lbl">Ouvrir ▾</span>
       </div>
       <div class="score-criteria" id="scoreCriteria">
-
-        <div class="criterion">
-          <div class="criterion-label">
-            <span>Adéquation positionnement</span>
-            <span class="criterion-pts" id="lbl-pos">0/20</span>
-          </div>
-          <input type="range" id="c-pos" min="0" max="20" value="0" oninput="calcScore()">
-        </div>
-
-        <div class="criterion">
-          <div class="criterion-label">
-            <span>Séniorité et périmètre réel</span>
-            <span class="criterion-pts" id="lbl-sen">0/15</span>
-          </div>
-          <input type="range" id="c-sen" min="0" max="15" value="0" oninput="calcScore()">
-        </div>
-
-        <div class="criterion">
-          <div class="criterion-label">
-            <span>Leviers opérationnels réels</span>
-            <span class="criterion-pts" id="lbl-lev">0/15</span>
-          </div>
-          <input type="range" id="c-lev" min="0" max="15" value="0" oninput="calcScore()">
-        </div>
-
-        <div class="criterion">
-          <div class="criterion-label">
-            <span>Crédibilité sectorielle</span>
-            <span class="criterion-pts" id="lbl-sec">0/10</span>
-          </div>
-          <input type="range" id="c-sec" min="0" max="10" value="0" oninput="calcScore()">
-        </div>
-
-        <div class="criterion">
-          <div class="criterion-label">
-            <span>Compatibilité contraintes personnelles</span>
-            <span class="criterion-pts" id="lbl-con">0/15</span>
-          </div>
-          <input type="range" id="c-con" min="0" max="15" value="0" oninput="calcScore()">
-        </div>
-
-        <div class="criterion">
-          <div class="criterion-label">
-            <span>Profil de risque caché</span>
-            <span class="criterion-pts" id="lbl-ris">0/10</span>
-          </div>
-          <input type="range" id="c-ris" min="0" max="10" value="0" oninput="calcScore()">
-        </div>
-
-        <div class="criterion">
-          <div class="criterion-label">
-            <span>Défendabilité en entretien</span>
-            <span class="criterion-pts" id="lbl-def">0/10</span>
-          </div>
-          <input type="range" id="c-def" min="0" max="10" value="0" oninput="calcScore()">
-        </div>
-
-        <div class="criterion">
-          <div class="criterion-label">
-            <span>Valeur stratégique trajectoire</span>
-            <span class="criterion-pts" id="lbl-tra">0/5</span>
-          </div>
-          <input type="range" id="c-tra" min="0" max="5" value="0" oninput="calcScore()">
-        </div>
-
-        <!-- MALUS -->
+        <div class="criterion"><div class="criterion-label"><span>Adéquation positionnement</span><span class="criterion-pts" id="lbl-pos">0/20</span></div><input type="range" id="c-pos" min="0" max="20" value="0" oninput="calcScore()"></div>
+        <div class="criterion"><div class="criterion-label"><span>Séniorité et périmètre réel</span><span class="criterion-pts" id="lbl-sen">0/15</span></div><input type="range" id="c-sen" min="0" max="15" value="0" oninput="calcScore()"></div>
+        <div class="criterion"><div class="criterion-label"><span>Leviers opérationnels réels</span><span class="criterion-pts" id="lbl-lev">0/15</span></div><input type="range" id="c-lev" min="0" max="15" value="0" oninput="calcScore()"></div>
+        <div class="criterion"><div class="criterion-label"><span>Crédibilité sectorielle</span><span class="criterion-pts" id="lbl-sec">0/10</span></div><input type="range" id="c-sec" min="0" max="10" value="0" oninput="calcScore()"></div>
+        <div class="criterion"><div class="criterion-label"><span>Compatibilité contraintes personnelles</span><span class="criterion-pts" id="lbl-con">0/15</span></div><input type="range" id="c-con" min="0" max="15" value="0" oninput="calcScore()"></div>
+        <div class="criterion"><div class="criterion-label"><span>Profil de risque caché</span><span class="criterion-pts" id="lbl-ris">0/10</span></div><input type="range" id="c-ris" min="0" max="10" value="0" oninput="calcScore()"></div>
+        <div class="criterion"><div class="criterion-label"><span>Défendabilité en entretien</span><span class="criterion-pts" id="lbl-def">0/10</span></div><input type="range" id="c-def" min="0" max="10" value="0" oninput="calcScore()"></div>
+        <div class="criterion"><div class="criterion-label"><span>Valeur stratégique trajectoire</span><span class="criterion-pts" id="lbl-tra">0/5</span></div><input type="range" id="c-tra" min="0" max="5" value="0" oninput="calcScore()"></div>
         <div class="malus-section">
           <div class="malus-title">⚠ Malus critères critiques</div>
-
-          <div class="malus-item">
-            <input type="checkbox" id="m-sector" onchange="calcScore()">
-            <label for="m-sector">Secteur hors cibles (déchets, services, non-industriel)</label>
-            <span class="malus-val">−8</span>
-          </div>
-
-          <div class="malus-item">
-            <input type="checkbox" id="m-commercial" onchange="calcScore()">
-            <label for="m-commercial">Charge commerciale / contractuelle significative</label>
-            <span class="malus-val">−7</span>
-          </div>
-
-          <div class="malus-item">
-            <input type="checkbox" id="m-directeur-site" onchange="calcScore()">
-            <label for="m-directeur-site">Directeur de site unique dans grand groupe (autonomie encadrée)</label>
-            <span class="malus-val">−6</span>
-          </div>
-
-          <div class="malus-item">
-            <input type="checkbox" id="m-perimetre" onchange="calcScore()">
-            <label for="m-perimetre">Périmètre flou ou titre gonflé sur scope faible</label>
-            <span class="malus-val">−8</span>
-          </div>
-
-          <div class="malus-item">
-            <input type="checkbox" id="m-salaire" onchange="calcScore()">
-            <label for="m-salaire">Package probablement sous plancher (95K€ fixe)</label>
-            <span class="malus-val">−10</span>
-          </div>
-
-          <div class="malus-item">
-            <input type="checkbox" id="m-mobilite" onchange="calcScore()">
-            <label for="m-mobilite">Mobilité géographique incompatible</label>
-            <span class="malus-val">−12</span>
-          </div>
+          <div class="malus-item"><input type="checkbox" id="m-sector" onchange="calcScore()"><label for="m-sector">Secteur hors cibles (déchets, services, non-industriel)</label><span class="malus-val">−8</span></div>
+          <div class="malus-item"><input type="checkbox" id="m-commercial" onchange="calcScore()"><label for="m-commercial">Charge commerciale / contractuelle significative</label><span class="malus-val">−7</span></div>
+          <div class="malus-item"><input type="checkbox" id="m-directeur-site" onchange="calcScore()"><label for="m-directeur-site">Directeur de site unique dans grand groupe (autonomie encadrée)</label><span class="malus-val">−6</span></div>
+          <div class="malus-item"><input type="checkbox" id="m-perimetre" onchange="calcScore()"><label for="m-perimetre">Périmètre flou ou titre gonflé sur scope faible</label><span class="malus-val">−8</span></div>
+          <div class="malus-item"><input type="checkbox" id="m-salaire" onchange="calcScore()"><label for="m-salaire">Package probablement sous plancher (95K€ fixe)</label><span class="malus-val">−10</span></div>
+          <div class="malus-item"><input type="checkbox" id="m-mobilite" onchange="calcScore()"><label for="m-mobilite">Mobilité géographique incompatible</label><span class="malus-val">−12</span></div>
         </div>
-
         <div class="calc-result">
-          <div>
-            <div style="font-size:11px;color:var(--text3);margin-bottom:3px">Score calculé</div>
-            <span class="calc-score-val" id="calcScoreVal">0</span>
-            <span style="font-size:13px;color:var(--text3)">/100</span>
-          </div>
+          <div><div style="font-size:11px;color:var(--text3);margin-bottom:3px">Score calculé</div><span class="calc-score-val" id="calcScoreVal">0</span><span style="font-size:13px;color:var(--text3)">/100</span></div>
           <span class="calc-verdict" id="calcVerdictBadge"></span>
           <button class="calc-apply-btn" onclick="applyCalcScore()">Appliquer →</button>
         </div>
       </div>
     </div>
-
-    <!-- FLAG ANTI-BIAIS -->
-    <div class="bias-flag" id="biasFlagForm">
-      <span class="bias-flag-icon">⚠</span>
-      <span id="biasFlagMsg"></span>
-    </div>
-
-    <div class="field"><label>Notes / Risques détectés</label>
-      <textarea id="f-notes" placeholder="Risques, questions à poser, contexte..."></textarea>
-    </div>
+    <div class="bias-flag" id="biasFlagForm"><span class="bias-flag-icon">⚠</span><span id="biasFlagMsg"></span></div>
+    <div class="field"><label>Notes / Risques détectés</label><textarea id="f-notes" placeholder="Risques, questions à poser, contexte..."></textarea></div>
     <div class="modal-actions">
       <button class="btn btn-secondary" onclick="closeAdd()">Annuler</button>
       <button class="btn btn-primary" onclick="saveCard()">Enregistrer</button>
@@ -803,6 +262,11 @@ body {
       <div class="detail-item"><div class="detail-label">Verdict</div><div class="detail-val" id="d-verdict"></div></div>
       <div class="detail-item"><div class="detail-label">Statut</div><div class="detail-val" id="d-status"></div></div>
       <div class="detail-item"><div class="detail-label">Ajoutée le</div><div class="detail-val" id="d-date"></div></div>
+      <!-- LIEN OFFRE DETAIL — NOUVEAU -->
+      <div class="detail-item" id="d-url-item" style="grid-column:1/-1;display:none">
+        <div class="detail-label">Lien offre</div>
+        <div class="detail-val" id="d-url"></div>
+      </div>
     </div>
     <hr class="detail-divider">
     <div class="detail-label" style="margin-bottom:8px">Notes / Risques</div>
@@ -823,183 +287,95 @@ body {
 <div class="toast" id="toast"></div>
 
 <script>
-const COLS = [
-  {id:'watch', label:'Veille', color:'#9E9B95'},
-  {id:'applied', label:'Candidaté', color:'#185FA5'},
-  {id:'interview', label:'Entretien', color:'#854F0B'},
-  {id:'offer', label:'Offre reçue', color:'#2D6A4F'},
-  {id:'closed', label:'Clôturé', color:'#9B2226'}
-];
-const VERDICTS = {
-  go: {label:'GO', cls:'badge-go'},
-  cond: {label:'GO cond.', cls:'badge-cond'},
-  no: {label:'NO GO', cls:'badge-no'},
-  doc: {label:'À doc.', cls:'badge-doc'}
-};
-const SCORE_COLORS = s => s >= 75 ? '#2D6A4F' : s >= 60 ? '#7B5E00' : '#9B2226';
+const COLS=[{id:'watch',label:'Veille',color:'#9E9B95'},{id:'applied',label:'Candidaté',color:'#185FA5'},{id:'interview',label:'Entretien',color:'#854F0B'},{id:'offer',label:'Offre reçue',color:'#2D6A4F'},{id:'closed',label:'Clôturé',color:'#9B2226'}];
+const VERDICTS={go:{label:'GO',cls:'badge-go'},cond:{label:'GO cond.',cls:'badge-cond'},no:{label:'NO GO',cls:'badge-no'},doc:{label:'À doc.',cls:'badge-doc'}};
+const SCORE_COLORS=s=>s>=75?'#2D6A4F':s>=60?'#7B5E00':'#9B2226';
 
-let cards = [];
-let activeFilter = 'all';
-let currentView = 'board';
-let detailId = null;
-let editId = null;
-let addTargetCol = 'watch';
+let cards=[],activeFilter='all',currentView='board',detailId=null,editId=null,addTargetCol='watch';
 
-function load() {
-  try {
-    const raw = localStorage.getItem('jst_v1');
-    if(raw) {
-      cards = JSON.parse(raw);
-    } else {
-      // Charger les données seed intégrées au fichier
-      cards = SEED_DATA.map(c => ({...c}));
-      save(); // persister immédiatement dans localStorage
-      showToast('✅ ' + cards.length + ' offres chargées depuis les données intégrées');
-    }
-  } catch(e) { cards = []; }
-  render();
-  checkBackupReminder();
+function load(){
+  try{
+    const raw=localStorage.getItem('jst_v1');
+    if(raw){cards=JSON.parse(raw);}
+    else{cards=SEED_DATA.map(c=>({...c}));save();showToast('✅ '+cards.length+' offres chargées depuis les données intégrées');}
+  }catch(e){cards=[];}
+  render();checkBackupReminder();
 }
 
-function save() {
-  localStorage.setItem('jst_v1', JSON.stringify(cards));
-  // Badge de sauvegarde
-  const btn = document.querySelector('[onclick="exportData()"]');
-  if(btn) { btn.textContent = '✅ Sauvegardé'; setTimeout(()=>{ btn.textContent = '💾 Sauvegarder'; }, 2000); }
+function save(){
+  localStorage.setItem('jst_v1',JSON.stringify(cards));
+  const btn=document.querySelector('[onclick="exportData()"]');
+  if(btn){btn.textContent='✅ Sauvegardé';setTimeout(()=>{btn.textContent='💾 Sauvegarder';},2000);}
 }
 
-// ── EXPORT ───────────────────────────────────────────────────────────
-function exportData() {
-  const data = {
-    version: 'jst_v2',
-    exportedAt: new Date().toISOString(),
-    cards: cards
+function exportData(){
+  const data={version:'jst_v2',exportedAt:new Date().toISOString(),cards:cards};
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);const a=document.createElement('a');
+  a.href=url;a.download=`job-tracker-backup-${new Date().toISOString().slice(0,10)}.json`;a.click();
+  URL.revokeObjectURL(url);showToast('💾 Backup téléchargé — '+cards.length+' offres sauvegardées');
+}
+
+function importData(event){
+  const file=event.target.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=function(e){
+    try{
+      const data=JSON.parse(e.target.result);
+      const imported=Array.isArray(data)?data:(data.cards||[]);
+      if(!Array.isArray(imported)||imported.length===0){showToast('❌ Fichier invalide ou vide');return;}
+      if(cards.length>0){if(!confirm(`Remplacer les ${cards.length} offres actuelles par les ${imported.length} offres du backup ?\n\nCliquez OK pour confirmer.`))return;}
+      cards=imported;save();render();showToast('✅ '+imported.length+' offres restaurées depuis le backup');
+    }catch(err){showToast('❌ Erreur de lecture du fichier JSON');}
   };
-  const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  const date = new Date().toISOString().slice(0,10);
-  a.href = url;
-  a.download = `job-tracker-backup-${date}.json`;
-  a.click();
-  URL.revokeObjectURL(url);
-  showToast('💾 Backup téléchargé — ' + cards.length + ' offres sauvegardées');
+  reader.readAsText(file);event.target.value='';
 }
 
-// ── IMPORT ───────────────────────────────────────────────────────────
-function importData(event) {
-  const file = event.target.files[0];
-  if(!file) return;
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    try {
-      const data = JSON.parse(e.target.result);
-      // Accepte format v2 (objet avec .cards) ou format brut (tableau)
-      const imported = Array.isArray(data) ? data : (data.cards || []);
-      if(!Array.isArray(imported) || imported.length === 0) {
-        showToast('❌ Fichier invalide ou vide');
-        return;
-      }
-      if(cards.length > 0) {
-        if(!confirm(`Remplacer les ${cards.length} offres actuelles par les ${imported.length} offres du backup ?\n\nCliquez OK pour confirmer.`)) return;
-      }
-      cards = imported;
-      save();
-      render();
-      showToast('✅ ' + imported.length + ' offres restaurées depuis le backup');
-    } catch(err) {
-      showToast('❌ Erreur de lecture du fichier JSON');
-    }
-  };
-  reader.readAsText(file);
-  event.target.value = ''; // reset input
-}
-
-// ── AUTO-BACKUP REMINDER ─────────────────────────────────────────────
-function checkBackupReminder() {
-  const lastBackup = localStorage.getItem('jst_lastBackup');
-  const now = Date.now();
-  if(!lastBackup || (now - parseInt(lastBackup)) > 24*60*60*1000) {
-    if(cards.length > 0) {
-      const btn = document.querySelector('[onclick="exportData()"]');
-      if(btn) btn.style.background = '#FFF3B0';
-    }
+function checkBackupReminder(){
+  const lastBackup=localStorage.getItem('jst_lastBackup');const now=Date.now();
+  if(!lastBackup||(now-parseInt(lastBackup))>24*60*60*1000){
+    if(cards.length>0){const btn=document.querySelector('[onclick="exportData()"]');if(btn)btn.style.background='#FFF3B0';}
   }
 }
 
-
-function filtered() {
-  if(activeFilter === 'all') return cards;
-  if(['go','cond','no','doc'].includes(activeFilter)) return cards.filter(c=>c.verdict===activeFilter);
+function filtered(){
+  if(activeFilter==='all')return cards;
+  if(['go','cond','no','doc'].includes(activeFilter))return cards.filter(c=>c.verdict===activeFilter);
   return cards.filter(c=>c.source===activeFilter);
 }
 
-function render() {
+function render(){
   renderKPIs();
-  if(currentView==='board') renderBoard();
-  if(currentView==='list') renderList();
-  if(currentView==='stats') renderStats();
+  if(currentView==='board')renderBoard();
+  if(currentView==='list')renderList();
+  if(currentView==='stats')renderStats();
 }
 
-function renderKPIs() {
-  const all = cards;
-  const total = all.length;
-  const go = all.filter(c=>c.verdict==='go').length;
-  const interviews = all.filter(c=>c.status==='interview').length;
-  const offers = all.filter(c=>c.status==='offer').length;
-  const applied = all.filter(c=>['applied','interview','offer'].includes(c.status)).length;
-  const rate = applied ? Math.round(interviews/applied*100) : 0;
-  const avgScore = total ? Math.round(all.filter(c=>c.score).reduce((a,c)=>a+parseInt(c.score),0)/all.filter(c=>c.score).length)||0 : 0;
-
-  document.getElementById('kpis').innerHTML = `
-    <div class="kpi-card">
-      <div class="kpi-label">Pipeline total</div>
-      <div class="kpi-val">${total}</div>
-      <div class="kpi-sub">offres suivies</div>
-      <div class="kpi-bar"><div class="kpi-bar-fill" style="width:100%"></div></div>
-    </div>
-    <div class="kpi-card">
-      <div class="kpi-label">GO confirmés</div>
-      <div class="kpi-val">${go}</div>
-      <div class="kpi-sub">${total ? Math.round(go/total*100) : 0}% du pipeline</div>
-      <div class="kpi-bar"><div class="kpi-bar-fill" style="width:${total?Math.round(go/total*100):0}%;background:#2D6A4F"></div></div>
-    </div>
-    <div class="kpi-card">
-      <div class="kpi-label">Candidatures</div>
-      <div class="kpi-val">${applied}</div>
-      <div class="kpi-sub">dossiers envoyés</div>
-      <div class="kpi-bar"><div class="kpi-bar-fill" style="width:${total?Math.round(applied/total*100):0}%;background:#185FA5"></div></div>
-    </div>
-    <div class="kpi-card">
-      <div class="kpi-label">Entretiens</div>
-      <div class="kpi-val">${interviews}</div>
-      <div class="kpi-sub">taux conv. ${rate}%</div>
-      <div class="kpi-bar"><div class="kpi-bar-fill" style="width:${rate}%;background:#854F0B"></div></div>
-    </div>
-    <div class="kpi-card">
-      <div class="kpi-label">Score moyen</div>
-      <div class="kpi-val">${avgScore || '—'}</div>
-      <div class="kpi-sub">${offers} offre(s) reçue(s)</div>
-      <div class="kpi-bar"><div class="kpi-bar-fill" style="width:${avgScore}%;background:${SCORE_COLORS(avgScore)}"></div></div>
-    </div>
-  `;
+function renderKPIs(){
+  const all=cards,total=all.length;
+  const go=all.filter(c=>c.verdict==='go').length;
+  const interviews=all.filter(c=>c.status==='interview').length;
+  const offers=all.filter(c=>c.status==='offer').length;
+  const applied=all.filter(c=>['applied','interview','offer'].includes(c.status)).length;
+  const rate=applied?Math.round(interviews/applied*100):0;
+  const avgScore=total?Math.round(all.filter(c=>c.score).reduce((a,c)=>a+parseInt(c.score),0)/all.filter(c=>c.score).length)||0:0;
+  document.getElementById('kpis').innerHTML=`
+    <div class="kpi-card"><div class="kpi-label">Pipeline total</div><div class="kpi-val">${total}</div><div class="kpi-sub">offres suivies</div><div class="kpi-bar"><div class="kpi-bar-fill" style="width:100%"></div></div></div>
+    <div class="kpi-card"><div class="kpi-label">GO confirmés</div><div class="kpi-val">${go}</div><div class="kpi-sub">${total?Math.round(go/total*100):0}% du pipeline</div><div class="kpi-bar"><div class="kpi-bar-fill" style="width:${total?Math.round(go/total*100):0}%;background:#2D6A4F"></div></div></div>
+    <div class="kpi-card"><div class="kpi-label">Candidatures</div><div class="kpi-val">${applied}</div><div class="kpi-sub">dossiers envoyés</div><div class="kpi-bar"><div class="kpi-bar-fill" style="width:${total?Math.round(applied/total*100):0}%;background:#185FA5"></div></div></div>
+    <div class="kpi-card"><div class="kpi-label">Entretiens</div><div class="kpi-val">${interviews}</div><div class="kpi-sub">taux conv. ${rate}%</div><div class="kpi-bar"><div class="kpi-bar-fill" style="width:${rate}%;background:#854F0B"></div></div></div>
+    <div class="kpi-card"><div class="kpi-label">Score moyen</div><div class="kpi-val">${avgScore||'—'}</div><div class="kpi-sub">${offers} offre(s) reçue(s)</div><div class="kpi-bar"><div class="kpi-bar-fill" style="width:${avgScore}%;background:${SCORE_COLORS(avgScore)}"></div></div></div>`;
 }
 
-function renderBoard() {
-  const fCards = filtered();
-  document.getElementById('board').innerHTML = COLS.map(col => {
-    const colCards = fCards.filter(c=>c.status===col.id);
+function renderBoard(){
+  const fCards=filtered();
+  document.getElementById('board').innerHTML=COLS.map(col=>{
+    const colCards=fCards.filter(c=>c.status===col.id);
     return `<div class="col">
-      <div class="col-header">
-        <div class="col-title-wrap">
-          <div class="col-dot" style="background:${col.color}"></div>
-          <span class="col-title">${col.label}</span>
-        </div>
-        <span class="col-count">${colCards.length}</span>
-      </div>
-      ${colCards.length === 0 ? `<div class="empty">Aucune offre</div>` : ''}
-      ${colCards.map(c => {
-        const sc = parseInt(c.score)||0;
+      <div class="col-header"><div class="col-title-wrap"><div class="col-dot" style="background:${col.color}"></div><span class="col-title">${col.label}</span></div><span class="col-count">${colCards.length}</span></div>
+      ${colCards.length===0?`<div class="empty">Aucune offre</div>`:''}
+      ${colCards.map(c=>{
+        const sc=parseInt(c.score)||0;
         return `<div class="card" onclick="openDetail('${c.id}')">
           <div class="card-title">${c.title}</div>
           <div class="card-company">${c.company}${c.location?' · '+c.location:''}</div>
@@ -1009,7 +385,8 @@ function renderBoard() {
             <span class="card-source">${c.source}</span>
           </div>
           ${c.score?`<div class="score-bar"><div class="score-bar-fill" style="width:${sc}%;background:${SCORE_COLORS(sc)}"></div></div>`:''}
-          ${hasBiasRisk(c) ? `<div style="margin-top:6px"><span class="card-flag">⚠ Vérifier biais attractivité</span></div>` : ''}
+          ${c.url?`<div style="margin-top:6px"><a href="${c.url}" target="_blank" onclick="event.stopPropagation()" style="font-size:10px;color:var(--blue);text-decoration:none">🔗 Voir l'offre</a></div>`:''}
+          ${hasBiasRisk(c)?`<div style="margin-top:6px"><span class="card-flag">⚠ Vérifier biais attractivité</span></div>`:''}
         </div>`;
       }).join('')}
       <button class="add-btn" onclick="openAdd('${col.id}')">+ Ajouter</button>
@@ -1017,367 +394,257 @@ function renderBoard() {
   }).join('');
 }
 
-function renderList() {
-  const fCards = filtered();
-  document.getElementById('listBody').innerHTML = fCards.map(c => `
+function renderList(){
+  const fCards=filtered();
+  document.getElementById('listBody').innerHTML=fCards.map(c=>`
     <tr onclick="openDetail('${c.id}')">
-      <td style="font-weight:500">${c.title}</td>
-      <td>${c.company}</td>
-      <td>${c.location||'—'}</td>
+      <td style="font-weight:500">${c.title}</td><td>${c.company}</td><td>${c.location||'—'}</td>
       <td>${c.source}</td>
       <td style="font-family:'DM Mono',monospace;font-size:12px">${c.score?c.score+'/100':'—'}</td>
       <td><span class="badge ${VERDICTS[c.verdict]?.cls||'badge-doc'}">${VERDICTS[c.verdict]?.label||'—'}</span></td>
       <td>${COLS.find(x=>x.id===c.status)?.label||c.status}</td>
       <td style="color:var(--text3);font-size:12px">${c.date}</td>
-    </tr>
-  `).join('') || '<tr><td colspan="8" style="text-align:center;color:var(--text3);padding:24px">Aucune offre</td></tr>';
+      <td>${c.url?`<a href="${c.url}" target="_blank" onclick="event.stopPropagation()" style="color:var(--blue);font-size:12px;text-decoration:none;white-space:nowrap">↗ Offre</a>`:'—'}</td>
+    </tr>`).join('')||'<tr><td colspan="9" style="text-align:center;color:var(--text3);padding:24px">Aucune offre</td></tr>';
 }
 
-function renderStats() {
-  const all = cards;
-  const bySource = {};
-  const byVerdict = {go:0,cond:0,no:0,doc:0};
-  const byStatus = {};
-  all.forEach(c=>{
-    bySource[c.source] = (bySource[c.source]||0)+1;
-    byVerdict[c.verdict] = (byVerdict[c.verdict]||0)+1;
-    byStatus[c.status] = (byStatus[c.status]||0)+1;
-  });
-
-  document.getElementById('statsContent').innerHTML = `
-    <div class="stat-block">
-      <h4>Par source</h4>
-      ${Object.entries(bySource).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`
-        <div class="stat-row"><span class="stat-row-label">${k}</span><span class="stat-row-val">${v}</span></div>
-      `).join('') || '<div style="color:var(--text3);font-size:13px">Aucune donnée</div>'}
-    </div>
-    <div class="stat-block">
-      <h4>Par verdict</h4>
+function renderStats(){
+  const all=cards,bySource={},byVerdict={go:0,cond:0,no:0,doc:0},byStatus={};
+  all.forEach(c=>{bySource[c.source]=(bySource[c.source]||0)+1;byVerdict[c.verdict]=(byVerdict[c.verdict]||0)+1;byStatus[c.status]=(byStatus[c.status]||0)+1;});
+  document.getElementById('statsContent').innerHTML=`
+    <div class="stat-block"><h4>Par source</h4>${Object.entries(bySource).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<div class="stat-row"><span class="stat-row-label">${k}</span><span class="stat-row-val">${v}</span></div>`).join('')||'<div style="color:var(--text3);font-size:13px">Aucune donnée</div>'}</div>
+    <div class="stat-block"><h4>Par verdict</h4>
       <div class="stat-row"><span class="stat-row-label">GO</span><span class="stat-row-val" style="color:var(--go)">${byVerdict.go}</span></div>
       <div class="stat-row"><span class="stat-row-label">GO sous conditions</span><span class="stat-row-val" style="color:var(--cond)">${byVerdict.cond}</span></div>
       <div class="stat-row"><span class="stat-row-label">NO GO</span><span class="stat-row-val" style="color:var(--no)">${byVerdict.no}</span></div>
       <div class="stat-row"><span class="stat-row-label">À documenter</span><span class="stat-row-val" style="color:var(--doc)">${byVerdict.doc}</span></div>
     </div>
-    <div class="stat-block">
-      <h4>Par statut</h4>
-      ${COLS.map(col=>`
-        <div class="stat-row">
-          <span class="stat-row-label" style="display:flex;align-items:center;gap:6px">
-            <span style="width:7px;height:7px;border-radius:50%;background:${col.color};display:inline-block"></span>
-            ${col.label}
-          </span>
-          <span class="stat-row-val">${byStatus[col.id]||0}</span>
-        </div>
-      `).join('')}
-    </div>
-  `;
+    <div class="stat-block"><h4>Par statut</h4>${COLS.map(col=>`<div class="stat-row"><span class="stat-row-label" style="display:flex;align-items:center;gap:6px"><span style="width:7px;height:7px;border-radius:50%;background:${col.color};display:inline-block"></span>${col.label}</span><span class="stat-row-val">${byStatus[col.id]||0}</span></div>`).join('')}</div>`;
 }
 
-function setView(v) {
-  currentView = v;
-  document.querySelectorAll('.view-btn').forEach((b,i)=>{
-    b.classList.toggle('active', ['board','list','stats'][i]===v);
-  });
-  document.getElementById('boardWrap').classList.toggle('hidden', v!=='board');
-  document.getElementById('listWrap').classList.toggle('active', v==='list');
-  document.getElementById('statsWrap').classList.toggle('active', v==='stats');
+function setView(v){
+  currentView=v;
+  document.querySelectorAll('.view-btn').forEach((b,i)=>{b.classList.toggle('active',['board','list','stats'][i]===v);});
+  document.getElementById('boardWrap').classList.toggle('hidden',v!=='board');
+  document.getElementById('listWrap').classList.toggle('active',v==='list');
+  document.getElementById('statsWrap').classList.toggle('active',v==='stats');
   render();
 }
 
-function setFilter(f, btn) {
-  activeFilter = f;
+function setFilter(f,btn){
+  activeFilter=f;
   document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  render();
+  btn.classList.add('active');render();
 }
 
-function openAdd(colId) {
-  addTargetCol = colId;
-  editId = null;
-  document.getElementById('addModalTitle').textContent = 'Ajouter une offre';
-  ['title','company','location','salary','score','notes'].forEach(f=>document.getElementById('f-'+f).value='');
-  document.getElementById('f-source').value = 'LinkedIn';
-  document.getElementById('f-verdict').value = 'go';
-  document.getElementById('f-status').value = colId;
+function openAdd(colId){
+  addTargetCol=colId;editId=null;
+  document.getElementById('addModalTitle').textContent='Ajouter une offre';
+  ['title','company','location','salary','score','notes','url'].forEach(f=>document.getElementById('f-'+f).value='');
+  document.getElementById('f-source').value='LinkedIn';
+  document.getElementById('f-verdict').value='go';
+  document.getElementById('f-status').value=colId;
   document.getElementById('addModal').classList.add('open');
 }
 
-function closeAdd() { document.getElementById('addModal').classList.remove('open'); }
+function closeAdd(){document.getElementById('addModal').classList.remove('open');}
 
-function saveCard() {
-  const title = document.getElementById('f-title').value.trim();
-  const company = document.getElementById('f-company').value.trim();
-  if(!title||!company) { showToast('Poste et entreprise requis'); return; }
-
-  if(editId) {
-    const c = cards.find(x=>x.id===editId);
-    if(c) {
-      c.title=title; c.company=company;
+function saveCard(){
+  const title=document.getElementById('f-title').value.trim();
+  const company=document.getElementById('f-company').value.trim();
+  if(!title||!company){showToast('Poste et entreprise requis');return;}
+  if(editId){
+    const c=cards.find(x=>x.id===editId);
+    if(c){
+      c.title=title;c.company=company;
       c.location=document.getElementById('f-location').value.trim();
       c.source=document.getElementById('f-source').value;
       c.score=document.getElementById('f-score').value;
       c.verdict=document.getElementById('f-verdict').value;
       c.salary=document.getElementById('f-salary').value.trim();
       c.notes=document.getElementById('f-notes').value.trim();
+      c.url=document.getElementById('f-url').value.trim();
       c.status=document.getElementById('f-status').value;
     }
     showToast('Offre mise à jour');
-  } else {
+  }else{
     cards.push({
-      id: Date.now().toString(),
-      title, company,
-      location: document.getElementById('f-location').value.trim(),
-      source: document.getElementById('f-source').value,
-      score: document.getElementById('f-score').value,
-      verdict: document.getElementById('f-verdict').value,
-      salary: document.getElementById('f-salary').value.trim(),
-      notes: document.getElementById('f-notes').value.trim(),
-      status: document.getElementById('f-status').value || addTargetCol,
-      date: new Date().toLocaleDateString('fr-FR')
+      id:Date.now().toString(),title,company,
+      location:document.getElementById('f-location').value.trim(),
+      source:document.getElementById('f-source').value,
+      score:document.getElementById('f-score').value,
+      verdict:document.getElementById('f-verdict').value,
+      salary:document.getElementById('f-salary').value.trim(),
+      notes:document.getElementById('f-notes').value.trim(),
+      url:document.getElementById('f-url').value.trim(),
+      status:document.getElementById('f-status').value||addTargetCol,
+      date:new Date().toLocaleDateString('fr-FR')
     });
     showToast('Offre ajoutée');
   }
-  save(); render(); closeAdd();
+  save();render();closeAdd();
 }
 
-function openDetail(id) {
-  const c = cards.find(x=>x.id===id);
-  if(!c) return;
-  detailId = id;
-  document.getElementById('d-title').textContent = c.title;
-  document.getElementById('d-company').textContent = c.company;
-  document.getElementById('d-location').textContent = c.location||'—';
-  document.getElementById('d-source').textContent = c.source;
-  document.getElementById('d-salary').textContent = c.salary||'Non documenté';
-  document.getElementById('d-score').textContent = c.score ? c.score+'/100' : 'Non scoré';
-  document.getElementById('d-verdict').innerHTML = `<span class="badge ${VERDICTS[c.verdict]?.cls||'badge-doc'}">${VERDICTS[c.verdict]?.label||'—'}</span>`;
-  document.getElementById('d-status').textContent = COLS.find(x=>x.id===c.status)?.label||c.status;
-  document.getElementById('d-date').textContent = c.date;
-  document.getElementById('d-notes').textContent = c.notes||'—';
-  document.getElementById('d-movebts').innerHTML = COLS.filter(x=>x.id!==c.status).map(col=>
-    `<button class="move-btn" onclick="moveCard('${col.id}')">${col.label}</button>`
-  ).join('');
+function openDetail(id){
+  const c=cards.find(x=>x.id===id);if(!c)return;
+  detailId=id;
+  document.getElementById('d-title').textContent=c.title;
+  document.getElementById('d-company').textContent=c.company;
+  document.getElementById('d-location').textContent=c.location||'—';
+  document.getElementById('d-source').textContent=c.source;
+  document.getElementById('d-salary').textContent=c.salary||'Non documenté';
+  document.getElementById('d-score').textContent=c.score?c.score+'/100':'Non scoré';
+  document.getElementById('d-verdict').innerHTML=`<span class="badge ${VERDICTS[c.verdict]?.cls||'badge-doc'}">${VERDICTS[c.verdict]?.label||'—'}</span>`;
+  document.getElementById('d-status').textContent=COLS.find(x=>x.id===c.status)?.label||c.status;
+  document.getElementById('d-date').textContent=c.date;
+  document.getElementById('d-notes').textContent=c.notes||'—';
+  // Lien offre
+  const urlItem=document.getElementById('d-url-item');
+  const urlEl=document.getElementById('d-url');
+  if(c.url){
+    urlEl.innerHTML=`<a href="${c.url}" target="_blank" style="color:var(--blue);text-decoration:none;word-break:break-all;font-size:13px">${c.url} ↗</a>`;
+    urlItem.style.display='';
+  }else{urlItem.style.display='none';}
+  document.getElementById('d-movebts').innerHTML=COLS.filter(x=>x.id!==c.status).map(col=>`<button class="move-btn" onclick="moveCard('${col.id}')">${col.label}</button>`).join('');
   document.getElementById('detailModal').classList.add('open');
 }
 
-function moveCard(newStatus) {
-  const c = cards.find(x=>x.id===detailId);
-  if(c) { c.status=newStatus; save(); render(); closeDetail(); showToast('Offre déplacée'); }
+function moveCard(newStatus){
+  const c=cards.find(x=>x.id===detailId);
+  if(c){c.status=newStatus;save();render();closeDetail();showToast('Offre déplacée');}
 }
 
-function editCard() {
-  const c = cards.find(x=>x.id===detailId);
-  if(!c) return;
-  closeDetail();
-  editId = c.id;
-  document.getElementById('addModalTitle').textContent = 'Modifier l\'offre';
-  document.getElementById('f-title').value = c.title;
-  document.getElementById('f-company').value = c.company;
-  document.getElementById('f-location').value = c.location||'';
-  document.getElementById('f-source').value = c.source;
-  document.getElementById('f-score').value = c.score||'';
-  document.getElementById('f-verdict').value = c.verdict||'go';
-  document.getElementById('f-salary').value = c.salary||'';
-  document.getElementById('f-notes').value = c.notes||'';
-  document.getElementById('f-status').value = c.status;
+function editCard(){
+  const c=cards.find(x=>x.id===detailId);if(!c)return;
+  closeDetail();editId=c.id;
+  document.getElementById('addModalTitle').textContent='Modifier l\'offre';
+  document.getElementById('f-title').value=c.title;
+  document.getElementById('f-company').value=c.company;
+  document.getElementById('f-location').value=c.location||'';
+  document.getElementById('f-source').value=c.source;
+  document.getElementById('f-score').value=c.score||'';
+  document.getElementById('f-verdict').value=c.verdict||'go';
+  document.getElementById('f-salary').value=c.salary||'';
+  document.getElementById('f-notes').value=c.notes||'';
+  document.getElementById('f-url').value=c.url||'';
+  document.getElementById('f-status').value=c.status;
   document.getElementById('addModal').classList.add('open');
 }
 
-function deleteCard() {
-  if(!confirm('Supprimer cette offre ?')) return;
-  cards = cards.filter(x=>x.id!==detailId);
-  save(); render(); closeDetail(); showToast('Offre supprimée');
+function deleteCard(){
+  if(!confirm('Supprimer cette offre ?'))return;
+  cards=cards.filter(x=>x.id!==detailId);
+  save();render();closeDetail();showToast('Offre supprimée');
 }
 
-function closeDetail() { document.getElementById('detailModal').classList.remove('open'); }
+function closeDetail(){document.getElementById('detailModal').classList.remove('open');}
 
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'), 2200);
+function showToast(msg){
+  const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2200);
 }
 
-// ── SCORE CALCULATOR ────────────────────────────────────────────
+const CRITERIA=['pos','sen','lev','sec','con','ris','def','tra'];
+const CRITERIA_MAX={pos:20,sen:15,lev:15,sec:10,con:15,ris:10,def:10,tra:5};
+const MALUS={sector:{val:8,label:'Secteur hors cible'},commercial:{val:7,label:'Charge commerciale/contractuelle'},'directeur-site':{val:6,label:'Dir. site unique grand groupe'},perimetre:{val:8,label:'Périmètre flou/gonflé'},salaire:{val:10,label:'Package sous plancher'},mobilite:{val:12,label:'Mobilité incompatible'}};
+const BIAS_KEYWORDS=['veolia','suez','engie','saint-gobain','michelin','airbus','schneider','directeur général','dg ','groupe international','leader mondial','avenant','développement commercial','fidéliser','portefeuille client','déchets','valorisation','incinér','thermique industriel'];
 
-const CRITERIA = ['pos','sen','lev','sec','con','ris','def','tra'];
-const CRITERIA_MAX = {pos:20,sen:15,lev:15,sec:10,con:15,ris:10,def:10,tra:5};
-const MALUS = {
-  sector: {val:8, label:'Secteur hors cible'},
-  commercial: {val:7, label:'Charge commerciale/contractuelle'},
-  'directeur-site': {val:6, label:'Dir. site unique grand groupe'},
-  perimetre: {val:8, label:'Périmètre flou/gonflé'},
-  salaire: {val:10, label:'Package sous plancher'},
-  mobilite: {val:12, label:'Mobilité incompatible'}
-};
-
-// Mots-clés déclencheurs de biais attractivité dans les notes
-const BIAS_KEYWORDS = [
-  'veolia','suez','engie','saint-gobain','michelin','airbus','schneider',
-  'directeur général','dg ','groupe international','leader mondial',
-  'avenant','développement commercial','fidéliser','portefeuille client',
-  'déchets','valorisation','incinér','thermique industriel'
-];
-
-function hasBiasRisk(c) {
-  const sc = parseInt(c.score)||0;
-  if (sc < 58 || sc > 82) return false; // hors zone de risque
-  if (c.verdict === 'no') return false;
-  const text = ((c.notes||'') + ' ' + (c.company||'') + ' ' + (c.title||'')).toLowerCase();
-  return BIAS_KEYWORDS.some(kw => text.includes(kw));
+function hasBiasRisk(c){
+  const sc=parseInt(c.score)||0;
+  if(sc<58||sc>82)return false;if(c.verdict==='no')return false;
+  const text=((c.notes||'')+' '+(c.company||'')+' '+(c.title||'')).toLowerCase();
+  return BIAS_KEYWORDS.some(kw=>text.includes(kw));
 }
 
-let calcOpen = false;
-
-function toggleCalc() {
-  calcOpen = !calcOpen;
-  document.getElementById('scoreCriteria').classList.toggle('open', calcOpen);
-  document.getElementById('calc-toggle-lbl').textContent = calcOpen ? 'Fermer ▴' : 'Ouvrir ▾';
-  if (calcOpen) calcScore();
+let calcOpen=false;
+function toggleCalc(){
+  calcOpen=!calcOpen;
+  document.getElementById('scoreCriteria').classList.toggle('open',calcOpen);
+  document.getElementById('calc-toggle-lbl').textContent=calcOpen?'Fermer ▴':'Ouvrir ▾';
+  if(calcOpen)calcScore();
 }
 
-function calcScore() {
-  // Base criteria
-  let base = CRITERIA.reduce((sum, id) => {
-    const el = document.getElementById('c-' + id);
-    const val = el ? parseInt(el.value) : 0;
-    document.getElementById('lbl-' + id).textContent = val + '/' + CRITERIA_MAX[id];
-    return sum + val;
-  }, 0);
-
-  // Malus
-  let malusTotal = 0;
-  let malusLabels = [];
-  Object.entries(MALUS).forEach(([id, m]) => {
-    const el = document.getElementById('m-' + id);
-    if (el && el.checked) {
-      malusTotal += m.val;
-      malusLabels.push(m.label);
-    }
-  });
-
-  const score = Math.max(0, base - malusTotal);
-  document.getElementById('calcScoreVal').textContent = score;
-
-  // Verdict auto
-  const badge = document.getElementById('calcVerdictBadge');
-  if (score >= 75) {
-    badge.textContent = 'GO';
-    badge.className = 'calc-verdict badge-go';
-  } else if (score >= 60) {
-    badge.textContent = 'GO sous conditions';
-    badge.className = 'calc-verdict badge-cond';
-  } else {
-    badge.textContent = 'NO GO';
-    badge.className = 'calc-verdict badge-no';
-  }
-
-  // Anti-biais flag dans le formulaire
-  const flag = document.getElementById('biasFlagForm');
-  const company = (document.getElementById('f-company')?.value||'').toLowerCase();
-  const title = (document.getElementById('f-title')?.value||'').toLowerCase();
-  const notes = (document.getElementById('f-notes')?.value||'').toLowerCase();
-  const contextText = company + ' ' + title + ' ' + notes;
-  const hasKeyword = BIAS_KEYWORDS.some(kw => contextText.includes(kw));
-  const inBiasZone = score >= 58 && score <= 82;
-
-  if (inBiasZone && hasKeyword && malusTotal > 0) {
-    const msg = `Biais attractivité probable — score ${score}/100 en zone frontière avec ${malusTotal} pts de malus (${malusLabels.join(', ')}). Vérifier le périmètre réel avant de postuler.`;
-    document.getElementById('biasFlagMsg').textContent = msg;
-    flag.classList.add('show');
-  } else if (inBiasZone && malusTotal > 0) {
-    const msg = `Score ${score}/100 en zone frontière avec ${malusTotal} pts de malus actifs. Confirmer les points de fragilité avant de valider.`;
-    document.getElementById('biasFlagMsg').textContent = msg;
-    flag.classList.add('show');
-  } else {
-    flag.classList.remove('show');
-  }
+function calcScore(){
+  let base=CRITERIA.reduce((sum,id)=>{
+    const el=document.getElementById('c-'+id);const val=el?parseInt(el.value):0;
+    document.getElementById('lbl-'+id).textContent=val+'/'+CRITERIA_MAX[id];return sum+val;
+  },0);
+  let malusTotal=0,malusLabels=[];
+  Object.entries(MALUS).forEach(([id,m])=>{const el=document.getElementById('m-'+id);if(el&&el.checked){malusTotal+=m.val;malusLabels.push(m.label);}});
+  const score=Math.max(0,base-malusTotal);
+  document.getElementById('calcScoreVal').textContent=score;
+  const badge=document.getElementById('calcVerdictBadge');
+  if(score>=75){badge.textContent='GO';badge.className='calc-verdict badge-go';}
+  else if(score>=60){badge.textContent='GO sous conditions';badge.className='calc-verdict badge-cond';}
+  else{badge.textContent='NO GO';badge.className='calc-verdict badge-no';}
+  const flag=document.getElementById('biasFlagForm');
+  const contextText=(document.getElementById('f-company')?.value||'').toLowerCase()+' '+(document.getElementById('f-title')?.value||'').toLowerCase()+' '+(document.getElementById('f-notes')?.value||'').toLowerCase();
+  const hasKeyword=BIAS_KEYWORDS.some(kw=>contextText.includes(kw));
+  const inBiasZone=score>=58&&score<=82;
+  if(inBiasZone&&hasKeyword&&malusTotal>0){document.getElementById('biasFlagMsg').textContent=`Biais attractivité probable — score ${score}/100 en zone frontière avec ${malusTotal} pts de malus (${malusLabels.join(', ')}). Vérifier le périmètre réel avant de postuler.`;flag.classList.add('show');}
+  else if(inBiasZone&&malusTotal>0){document.getElementById('biasFlagMsg').textContent=`Score ${score}/100 en zone frontière avec ${malusTotal} pts de malus actifs. Confirmer les points de fragilité avant de valider.`;flag.classList.add('show');}
+  else{flag.classList.remove('show');}
 }
 
-function applyCalcScore() {
-  const score = document.getElementById('calcScoreVal').textContent;
-  document.getElementById('f-score').value = score;
-  const sc = parseInt(score);
-  const verdict = sc >= 75 ? 'go' : sc >= 60 ? 'cond' : 'no';
-  document.getElementById('f-verdict').value = verdict;
-
-  // Reset calculateur
-  CRITERIA.forEach(id => {
-    const el = document.getElementById('c-' + id);
-    if (el) el.value = 0;
-    const lbl = document.getElementById('lbl-' + id);
-    if (lbl) lbl.textContent = '0/' + CRITERIA_MAX[id];
-  });
-  Object.keys(MALUS).forEach(id => {
-    const el = document.getElementById('m-' + id);
-    if (el) el.checked = false;
-  });
-  calcOpen = false;
-  document.getElementById('scoreCriteria').classList.remove('open');
-  document.getElementById('calc-toggle-lbl').textContent = 'Ouvrir ▾';
+function applyCalcScore(){
+  const score=document.getElementById('calcScoreVal').textContent;
+  document.getElementById('f-score').value=score;
+  const sc=parseInt(score);document.getElementById('f-verdict').value=sc>=75?'go':sc>=60?'cond':'no';
+  CRITERIA.forEach(id=>{const el=document.getElementById('c-'+id);if(el)el.value=0;const lbl=document.getElementById('lbl-'+id);if(lbl)lbl.textContent='0/'+CRITERIA_MAX[id];});
+  Object.keys(MALUS).forEach(id=>{const el=document.getElementById('m-'+id);if(el)el.checked=false;});
+  calcOpen=false;document.getElementById('scoreCriteria').classList.remove('open');
+  document.getElementById('calc-toggle-lbl').textContent='Ouvrir ▾';
   document.getElementById('biasFlagForm').classList.remove('show');
-  document.getElementById('calcScoreVal').textContent = '0';
-  document.getElementById('calcVerdictBadge').textContent = '';
-  document.getElementById('calcVerdictBadge').className = 'calc-verdict';
+  document.getElementById('calcScoreVal').textContent='0';document.getElementById('calcVerdictBadge').textContent='';document.getElementById('calcVerdictBadge').className='calc-verdict';
 }
 
-// Recalc flag quand les champs changent
-['f-company','f-title','f-notes'].forEach(id => {
-  const el = document.getElementById(id);
-  if (el) el.addEventListener('input', () => { if(calcOpen) calcScore(); });
-});
+['f-company','f-title','f-notes'].forEach(id=>{const el=document.getElementById(id);if(el)el.addEventListener('input',()=>{if(calcOpen)calcScore();});});
 
-// ── SEED DATA — données de référence intégrées au fichier ────────────
-// Chargées automatiquement si localStorage est vide (nouvelle session, cache vidé, etc.)
-const SEED_DATA = [
-  {id:'c1',title:"Directeur d'Unité Industrielle F/H",company:"Veolia RVD",location:"France",source:"Indeed",score:79,verdict:"go",salary:"NC",status:"watch",notes:"Match direct Indeed ×2 (01/05 + 25/04). Scope unité industrielle, process 24/7. Action : trouver l'offre complète et qualifier périmètre + reporting. ⚠ Flag biais attractivité actif.",date:"2026-05-06"},
-  {id:'c2',title:"Directeur Industriel Groupe F/H",company:"ACO",location:"France",source:"Indeed",score:77,verdict:"go",salary:"NC",status:"watch",notes:"Match direct Indeed (22/04). Titre Groupe = dimension multi-site probable. Rechercher offre complète + vérifier périmètre et secteur ACO.",date:"2026-05-06"},
-  {id:'c3',title:"Directeur Usine F/H",company:"PLACO® (Saint-Gobain)",location:"France",source:"LinkedIn",score:72,verdict:"go",salary:"NC",status:"watch",notes:"LinkedIn (04/05). Groupe de référence, process continu chimique/minéral. Lire offre LinkedIn complète, confirmer périmètre et reporting. ⚠ Flag biais attractivité actif.",date:"2026-05-06"},
-  {id:'c4',title:"Directeur des Opérations F/H",company:"Elior Group",location:"France",source:"LinkedIn",score:74,verdict:"go",salary:"NC",status:"watch",notes:"⚠️ URGENT — expire le 12/05. Elior = groupe restauration collective industrielle, ops multi-sites. Vérifier levier management et scope.",date:"2026-05-06"},
-  {id:'c5',title:"Responsable d'Unité de Production H/F",company:"ALSTOM",location:"France",source:"Indeed",score:71,verdict:"go",salary:"NC",status:"watch",notes:"Match direct Indeed (05/05). ALSTOM = groupe industriel de référence, process ferroviaire. Vérifier taille unité et périmètre.",date:"2026-05-06"},
-  {id:'c6',title:"Directeur de production / Directrice de production",company:"Smurfit Westrock",location:"France",source:"LinkedIn",score:68,verdict:"go",salary:"NC",status:"watch",notes:"LinkedIn (30/04). Groupe industriel papier/emballage international, process continu. Vérifier localisation et périmètre site.",date:"2026-05-06"},
-  {id:'c7',title:"Directeur de site / Plant Manager H/F",company:"Covestro",location:"France",source:"LinkedIn",score:73,verdict:"go",salary:"NC",status:"watch",notes:"LinkedIn (26/04). Covestro = groupe chimie international, process continu, culture ingénierie forte. Directeur de site = périmètre plein. Vérifier localisation et taille site.",date:"2026-05-06"},
-  {id:'c8',title:"Directeur Industriel F/H",company:"Michael Page International",location:"Dijon (21)",source:"APEC",score:72,verdict:"go",salary:"NC",status:"watch",notes:"APEC (05/05). Michael Page = cabinet tier 1, Directeur Industriel senior, Dijon = proximité géographique favorable. Vérifier secteur et périmètre du client — GO fort si industrie process ou manufacturing.",date:"2026-05-06"},
-  {id:'c9',title:"Directeur d'Usines F/H",company:"HORUS CONSEILS",location:"Issoire (63)",source:"APEC",score:70,verdict:"go",salary:"NC",status:"watch",notes:"APEC (05/05). Titre pluriel 'Directeur d'Usines' = scope multi-sites potentiel. HORUS CONSEILS = cabinet industriel. Issoire 63 = Auvergne, mobilité à confirmer. Vérifier secteur client (aéronautique/industrie lourde).",date:"2026-05-06"},
-  {id:'c10',title:"Directeur d'Usine H/F/X",company:"Mondelēz International",location:"France",source:"LinkedIn",score:68,verdict:"cond",salary:"NC",status:"watch",notes:"LinkedIn (02/05). Groupe international, usine process alimentaire. GO si site >300 personnes — vérifier localisation.",date:"2026-05-06"},
-  {id:'c11',title:"Directeur de site H/F",company:"SND",location:"France",source:"Indeed",score:65,verdict:"cond",salary:"85K€+",status:"watch",notes:"Match Indeed (24/04). Rémunération documentée. Identifier secteur et taille site SND avant toute démarche.",date:"2026-05-06"},
-  {id:'c12',title:"Directeur des Opérations – Scale-up",company:"Collective.work",location:"France",source:"Indeed",score:63,verdict:"cond",salary:"80-120K€",status:"watch",notes:"Indeed (28/04). Rémunération senior. Risque scale-up / 'bras droit fondateur' ambigu. Vérifier si activité industrielle réelle.",date:"2026-05-06"},
-  {id:'c13',title:"Plant Manager",company:"Pacific International Executive Search",location:"France",source:"LinkedIn",score:62,verdict:"cond",salary:"NC",status:"watch",notes:"LinkedIn (03/05). Cabinet executive search. Vérifier géographie France + secteur industriel.",date:"2026-05-06"},
-  {id:'c14',title:"Directeur Industriel Adjoint H/F",company:"Comeca Group",location:"France",source:"LinkedIn",score:63,verdict:"cond",salary:"NC",status:"watch",notes:"LinkedIn (30/04). Comeca = solutions électriques industrielles. Adjoint = scope à qualifier. Vérifier si évolution vers direction pleine.",date:"2026-05-06"},
-  {id:'c15',title:"Directeur des Opérations H/F",company:"Advisia RH",location:"France",source:"LinkedIn",score:60,verdict:"cond",salary:"NC",status:"watch",notes:"LinkedIn (01/05). Cabinet Advisia = client non identifié. Vérifier le client réel avant décision.",date:"2026-05-06"},
-  {id:'c16',title:"Directeur de Production H/F",company:"Hermès",location:"France",source:"LinkedIn",score:58,verdict:"cond",salary:"NC",status:"watch",notes:"LinkedIn (01/05). Hermès Maroquinerie = artisanat industriel haut de gamme, process manufacturing manuel/semi-auto. Culture très différente de l'industrie lourde. GO si contexte transformation et structuration confirmés.",date:"2026-05-06"},
-  {id:'c17',title:"Directeur de production H/F",company:"Grant Alexander",location:"France",source:"LinkedIn",score:66,verdict:"cond",salary:"NC",status:"watch",notes:"LinkedIn (27/04). Cabinet executive search sérieux (mid/senior). Client non identifié. Vérifier secteur, taille et scope avant démarche.",date:"2026-05-06"},
-  {id:'c18',title:"Plant Manager",company:"Serioplast",location:"France",source:"LinkedIn",score:64,verdict:"cond",salary:"NC",status:"watch",notes:"LinkedIn (24/04). Serioplast = groupe plasturgie international, packaging rigide. Plant Manager = périmètre potentiellement solide. Vérifier localisation France et taille usine.",date:"2026-05-06"},
-  {id:'c19',title:"Responsable des Opérations F/H",company:"Thales",location:"Gennevilliers (92)",source:"LinkedIn",score:63,verdict:"cond",salary:"NC",status:"watch",notes:"LinkedIn (30/04). Thales = groupe défense/électronique de référence. Responsable Opérations = scope à qualifier (fonctionnel ou opérationnel ?). Vérifier périmètre management.",date:"2026-05-06"},
-  {id:'c20',title:"Senior Operations Manager",company:"Air Liquide",location:"France",source:"LinkedIn",score:62,verdict:"cond",salary:"NC",status:"watch",notes:"LinkedIn (27/04). Air Liquide = groupe industriel gazier de premier plan, process continu 24/7. Senior Ops Manager = scope international probable. Vérifier si rôle France ou expatriation.",date:"2026-05-06"},
-  {id:'c21',title:"COO - Directeur des opérations H/F",company:"ESSP SAS",location:"France",source:"LinkedIn",score:60,verdict:"cond",salary:"NC",status:"watch",notes:"LinkedIn (24/04). ESSP = structure aviation (EGNOS/Galileo), ~200p. COO = plein levier opérationnel. Risque : taille modeste, secteur spatial/services. GO si structuration en cours.",date:"2026-05-06"},
-  {id:'c22',title:"Directeur de production H/F",company:"Antenor (Santé / Sciences de la vie)",location:"France",source:"LinkedIn",score:64,verdict:"cond",salary:"NC",status:"watch",notes:"LinkedIn (01/05). Antenor = cabinet spécialisé Santé & Sciences de la vie. Directeur de production senior — secteur pharma/medtech intéressant si site industriel réel. Vérifier taille et périmètre management.",date:"2026-05-06"},
-  {id:'c23',title:"Manager de Production H/F",company:"Barry Callebaut Group",location:"France",source:"LinkedIn",score:58,verdict:"cond",salary:"NC",status:"watch",notes:"LinkedIn (04/05 — ×2). Barry Callebaut = leader mondial chocolat industriel, process continu, standards qualité alimentaire élevés. Titre Manager = scope à qualifier : directeur ou N-1 ? Vérifier taille site et reporting.",date:"2026-05-06"},
-  {id:'c24',title:"Manager Opérations Manufacturing/Supply Chain F/H",company:"Mews Partners",location:"France",source:"LinkedIn",score:55,verdict:"cond",salary:"NC",status:"watch",notes:"LinkedIn (30/04). Mews Partners = cabinet conseil expert manufacturing. Client non identifié. Manager Opérations = rôle potentiellement fort si mission de transformation. Vérifier si poste opérationnel terrain ou consulting.",date:"2026-05-06"},
-  {id:'c25',title:"Directeur Général F/H",company:"Michael Page International",location:"Pardies (64)",source:"APEC",score:65,verdict:"cond",salary:"NC",status:"watch",notes:"APEC (05/05). Michael Page + DG = scope maximal sur papier. Pardies 64 = Pyrénées-Atlantiques, mobilité contraignante depuis Audincourt. Vérifier secteur et taille de la structure.",date:"2026-05-06"},
-  {id:'c26',title:"Directeur Général Délégué F/H",company:"ELATOS",location:"Montpellier (34)",source:"APEC",score:62,verdict:"cond",salary:"NC",status:"watch",notes:"APEC (05/05). DGD = plein levier opérationnel et stratégique. ELATOS = cabinet, client non identifié. Montpellier = mobilité à confirmer. Vérifier secteur industriel et taille.",date:"2026-05-06"},
-  {id:'c27',title:"Directeur de Business Unit Fourniture Industrielle F/H",company:"ADITO DEVELOPPEMENT",location:"Lyon (69)",source:"APEC",score:60,verdict:"cond",salary:"NC",status:"watch",notes:"APEC (05/05). BU fourniture industrielle = périmètre commercial + opérationnel. Lyon = bassin favorable. Risque : charge commerciale/contractuelle forte = malus potentiel. Vérifier équilibre ops/commerce.",date:"2026-05-06"},
-  {id:'c28',title:"Directeur des Opérations Transport F/H",company:"Turnpoint",location:"Strasbourg (67)",source:"APEC",score:61,verdict:"cond",salary:"NC",status:"watch",notes:"APEC (05/05). Turnpoint = transport/logistique. Directeur des Opérations = périmètre réel mais secteur transport ≠ industrie manufacturière. GO si périmètre multi-sites avec management opérationnel fort.",date:"2026-05-06"},
-  {id:'c29',title:"Directeur Usine F/H",company:"Fed Engineering",location:"Troyes (10)",source:"APEC",score:62,verdict:"cond",salary:"NC",status:"watch",notes:"APEC (05/05). Fed Engineering = cabinet spécialisé industrie. Directeur Usine = titre fort. Troyes = mobilité à confirmer (distance Audincourt ~300km). Vérifier secteur client et taille site.",date:"2026-05-06"},
-  {id:'c30',title:"Directeur Automation & data engineering F/H",company:"Recherche confidentielle",location:"Multi-sites France (Florange, Chaumont, Nîmes...)",source:"APEC",score:52,verdict:"cond",salary:"NC",status:"watch",notes:"APEC (05/05). Offre confidentielle déclinée sur 11 localisations. Automation & data = périmètre tech/digital à qualifier. GO si dimension industrielle ops confirmée.",date:"2026-05-06"},
-  {id:'c31',title:"Resp. site production Freelance",company:"Collective.work",location:"France",source:"Indeed",score:35,verdict:"no",salary:"727€/j",status:"closed",notes:"NO GO : freelance incompatible avec projet durable. Pas de levier management permanent.",date:"2026-05-06"},
-  {id:'c32',title:"Directeur Maintenance & Service Client",company:"CNS Worldwide Executive Search",location:"France",source:"LinkedIn",score:42,verdict:"no",salary:"NC",status:"closed",notes:"NO GO : PME + périmètre Maintenance seul + Service Client = scope fragmenté. Taille structure insuffisante.",date:"2026-05-06"},
-  {id:'c33',title:"Directeur Projets Industriels SQCDME",company:"Agrial",location:"France",source:"LinkedIn",score:44,verdict:"no",salary:"NC",status:"closed",notes:"NO GO : rôle fonctionnel Projets/Méthodes/Standards, pas de responsabilité opérationnelle directe. Profil expert ≠ profil bâtisseur.",date:"2026-05-06"},
-  {id:'c34',title:"Directeur de Site Machines Spéciales Agro",company:"Cofabrik RH",location:"La Tour-du-Pin (38)",source:"Indeed",score:48,verdict:"no",salary:"NC",status:"closed",notes:"NO GO : niche technologique éloignée du profil, taille structure faible, localisation contraignante.",date:"2026-05-06"},
-  {id:'c35',title:"Directeur de production",company:"LOUAULT TECHNOLOGIES & INDUSTRIES",location:"France",source:"Indeed",score:45,verdict:"no",salary:"NC",status:"closed",notes:"NO GO : Directeur de production sans périmètre élargi documenté, PME probable, scope transverse non confirmé.",date:"2026-05-06"},
-  {id:'c36',title:"Responsable de site industriel H/F",company:"Groupe PIMENT (AEROCONTACT)",location:"France",source:"LinkedIn",score:42,verdict:"no",salary:"NC",status:"closed",notes:"NO GO : Responsable de site = scope trop restreint, Groupe PIMENT = structure PME, secteur aéronautique niche.",date:"2026-05-06"},
-  {id:'c37',title:"Operations Maintenance Manager",company:"Prosolia Energy Group",location:"France",source:"LinkedIn",score:35,verdict:"no",salary:"NC",status:"closed",notes:"NO GO : périmètre Maintenance seul, énergies renouvelables = secteur services, pas d'usine industrielle.",date:"2026-05-06"},
-  {id:'c38',title:"Manager Production H/F",company:"IKIWAY Cabinet de Recrutement",location:"France",source:"LinkedIn",score:25,verdict:"no",salary:"38-40K€",status:"closed",notes:"NO GO : salaire affiché 38-40K€ — très en dessous du plancher (95K€). Éliminé immédiatement.",date:"2026-05-06"},
-  {id:'c39',title:"Partner Production Manager (f/m/d)",company:"Freudenberg Sealing Technologies",location:"France",source:"LinkedIn",score:38,verdict:"no",salary:"NC",status:"closed",notes:"NO GO : titre hybride Partner/Manager = périmètre flou, niche technique, poste probablement hors France.",date:"2026-05-06"},
-  {id:'c40',title:"Directeur commercial - Manager Transition",company:"Leaderia",location:"Agen (47)",source:"APEC",score:30,verdict:"no",salary:"NC",status:"closed",notes:"NO GO : commercial/transition = hors profil opérationnel industriel.",date:"2026-05-06"},
-  {id:'c41',title:"Directeur Programmes Défense",company:"CIMEM",location:"Saint-Chély-d'Apcher (48)",source:"APEC",score:35,verdict:"no",salary:"NC",status:"closed",notes:"NO GO : rôle programmes/projets défense, localisation très isolée (48).",date:"2026-05-06"}
+const SEED_DATA=[
+  {id:'c1',title:"Directeur d'Unité Industrielle F/H",company:"Veolia RVD",location:"France",source:"Indeed",score:79,verdict:"go",salary:"NC",status:"watch",url:"",notes:"Match direct Indeed ×2 (01/05 + 25/04). Scope unité industrielle, process 24/7. Action : trouver l'offre complète et qualifier périmètre + reporting. ⚠ Flag biais attractivité actif.",date:"2026-05-06"},
+  {id:'c2',title:"Directeur Industriel Groupe F/H",company:"ACO",location:"France",source:"Indeed",score:77,verdict:"go",salary:"NC",status:"watch",url:"",notes:"Match direct Indeed (22/04). Titre Groupe = dimension multi-site probable. Rechercher offre complète + vérifier périmètre et secteur ACO.",date:"2026-05-06"},
+  {id:'c3',title:"Directeur Usine F/H",company:"PLACO® (Saint-Gobain)",location:"France",source:"LinkedIn",score:72,verdict:"go",salary:"NC",status:"watch",url:"",notes:"LinkedIn (04/05). Groupe de référence, process continu chimique/minéral. Lire offre LinkedIn complète, confirmer périmètre et reporting. ⚠ Flag biais attractivité actif.",date:"2026-05-06"},
+  {id:'c4',title:"Directeur des Opérations F/H",company:"Elior Group",location:"France",source:"LinkedIn",score:74,verdict:"go",salary:"NC",status:"watch",url:"",notes:"⚠️ URGENT — expire le 12/05. Elior = groupe restauration collective industrielle, ops multi-sites. Vérifier levier management et scope.",date:"2026-05-06"},
+  {id:'c5',title:"Responsable d'Unité de Production H/F",company:"ALSTOM",location:"France",source:"Indeed",score:71,verdict:"go",salary:"NC",status:"watch",url:"",notes:"Match direct Indeed (05/05). ALSTOM = groupe industriel de référence, process ferroviaire. Vérifier taille unité et périmètre.",date:"2026-05-06"},
+  {id:'c6',title:"Directeur de production / Directrice de production",company:"Smurfit Westrock",location:"France",source:"LinkedIn",score:68,verdict:"go",salary:"NC",status:"watch",url:"",notes:"LinkedIn (30/04). Groupe industriel papier/emballage international, process continu. Vérifier localisation et périmètre site.",date:"2026-05-06"},
+  {id:'c7',title:"Directeur de site / Plant Manager H/F",company:"Covestro",location:"France",source:"LinkedIn",score:73,verdict:"go",salary:"NC",status:"watch",url:"",notes:"LinkedIn (26/04). Covestro = groupe chimie international, process continu, culture ingénierie forte. Directeur de site = périmètre plein. Vérifier localisation et taille site.",date:"2026-05-06"},
+  {id:'c8',title:"Directeur Industriel F/H",company:"Michael Page International",location:"Dijon (21)",source:"APEC",score:72,verdict:"go",salary:"NC",status:"watch",url:"",notes:"APEC (05/05). Michael Page = cabinet tier 1, Directeur Industriel senior, Dijon = proximité géographique favorable. Vérifier secteur et périmètre du client.",date:"2026-05-06"},
+  {id:'c9',title:"Directeur d'Usines F/H",company:"HORUS CONSEILS",location:"Issoire (63)",source:"APEC",score:70,verdict:"go",salary:"NC",status:"watch",url:"",notes:"APEC (05/05). Titre pluriel 'Directeur d'Usines' = scope multi-sites potentiel. Issoire 63 = Auvergne, mobilité à confirmer.",date:"2026-05-06"},
+  {id:'c10',title:"Directeur d'Usine H/F/X",company:"Mondelēz International",location:"France",source:"LinkedIn",score:68,verdict:"cond",salary:"NC",status:"watch",url:"",notes:"LinkedIn (02/05). Groupe international, usine process alimentaire. GO si site >300 personnes — vérifier localisation.",date:"2026-05-06"},
+  {id:'c11',title:"Directeur de site H/F",company:"SND",location:"France",source:"Indeed",score:65,verdict:"cond",salary:"85K€+",status:"watch",url:"",notes:"Match Indeed (24/04). Rémunération documentée. Identifier secteur et taille site SND avant toute démarche.",date:"2026-05-06"},
+  {id:'c12',title:"Directeur des Opérations – Scale-up",company:"Collective.work",location:"France",source:"Indeed",score:63,verdict:"cond",salary:"80-120K€",status:"watch",url:"",notes:"Indeed (28/04). Risque scale-up / 'bras droit fondateur' ambigu. Vérifier si activité industrielle réelle.",date:"2026-05-06"},
+  {id:'c13',title:"Plant Manager",company:"Pacific International Executive Search",location:"France",source:"LinkedIn",score:62,verdict:"cond",salary:"NC",status:"watch",url:"",notes:"LinkedIn (03/05). Cabinet executive search. Vérifier géographie France + secteur industriel.",date:"2026-05-06"},
+  {id:'c14',title:"Directeur Industriel Adjoint H/F",company:"Comeca Group",location:"France",source:"LinkedIn",score:63,verdict:"cond",salary:"NC",status:"watch",url:"",notes:"LinkedIn (30/04). Adjoint = scope à qualifier. Vérifier si évolution vers direction pleine.",date:"2026-05-06"},
+  {id:'c15',title:"Directeur des Opérations H/F",company:"Advisia RH",location:"France",source:"LinkedIn",score:60,verdict:"cond",salary:"NC",status:"watch",url:"",notes:"LinkedIn (01/05). Cabinet Advisia = client non identifié. Vérifier le client réel avant décision.",date:"2026-05-06"},
+  {id:'c16',title:"Directeur de Production H/F",company:"Hermès",location:"France",source:"LinkedIn",score:58,verdict:"cond",salary:"NC",status:"watch",url:"",notes:"LinkedIn (01/05). Hermès Maroquinerie = artisanat industriel haut de gamme. Culture très différente de l'industrie lourde. GO si contexte transformation confirmé.",date:"2026-05-06"},
+  {id:'c17',title:"Directeur de production H/F",company:"Grant Alexander",location:"France",source:"LinkedIn",score:66,verdict:"cond",salary:"NC",status:"watch",url:"",notes:"LinkedIn (27/04). Cabinet executive search sérieux. Client non identifié. Vérifier secteur, taille et scope avant démarche.",date:"2026-05-06"},
+  {id:'c18',title:"Plant Manager",company:"Serioplast",location:"France",source:"LinkedIn",score:64,verdict:"cond",salary:"NC",status:"watch",url:"",notes:"LinkedIn (24/04). Serioplast = groupe plasturgie international, packaging rigide. Vérifier localisation France et taille usine.",date:"2026-05-06"},
+  {id:'c19',title:"Responsable des Opérations F/H",company:"Thales",location:"Gennevilliers (92)",source:"LinkedIn",score:63,verdict:"cond",salary:"NC",status:"watch",url:"",notes:"LinkedIn (30/04). Thales = groupe défense/électronique de référence. Scope à qualifier (fonctionnel ou opérationnel ?).",date:"2026-05-06"},
+  {id:'c20',title:"Senior Operations Manager",company:"Air Liquide",location:"France",source:"LinkedIn",score:62,verdict:"cond",salary:"NC",status:"watch",url:"",notes:"LinkedIn (27/04). Air Liquide = groupe industriel gazier, process continu 24/7. Vérifier si rôle France ou expatriation.",date:"2026-05-06"},
+  {id:'c21',title:"COO - Directeur des opérations H/F",company:"ESSP SAS",location:"France",source:"LinkedIn",score:60,verdict:"cond",salary:"NC",status:"watch",url:"",notes:"LinkedIn (24/04). ESSP = structure aviation ~200p. COO = plein levier. Risque : taille modeste, secteur spatial/services.",date:"2026-05-06"},
+  {id:'c22',title:"Directeur de production H/F",company:"Antenor (Santé / Sciences de la vie)",location:"France",source:"LinkedIn",score:64,verdict:"cond",salary:"NC",status:"watch",url:"",notes:"LinkedIn (01/05). Antenor = cabinet Santé & Sciences de la vie. Secteur pharma/medtech intéressant si site industriel réel.",date:"2026-05-06"},
+  {id:'c23',title:"Manager de Production H/F",company:"Barry Callebaut Group",location:"France",source:"LinkedIn",score:58,verdict:"cond",salary:"NC",status:"watch",url:"",notes:"LinkedIn (04/05). Leader mondial chocolat industriel. Titre Manager = scope à qualifier : directeur ou N-1 ?",date:"2026-05-06"},
+  {id:'c24',title:"Manager Opérations Manufacturing/Supply Chain F/H",company:"Mews Partners",location:"France",source:"LinkedIn",score:55,verdict:"cond",salary:"NC",status:"watch",url:"",notes:"LinkedIn (30/04). Cabinet conseil expert manufacturing. Client non identifié. Vérifier si poste opérationnel terrain ou consulting.",date:"2026-05-06"},
+  {id:'c25',title:"Directeur Général F/H",company:"Michael Page International",location:"Pardies (64)",source:"APEC",score:65,verdict:"cond",salary:"NC",status:"watch",url:"",notes:"APEC (05/05). Michael Page + DG = scope maximal sur papier. Pardies 64 = Pyrénées-Atlantiques, mobilité contraignante depuis Audincourt.",date:"2026-05-06"},
+  {id:'c26',title:"Directeur Général Délégué F/H",company:"ELATOS",location:"Montpellier (34)",source:"APEC",score:62,verdict:"cond",salary:"NC",status:"watch",url:"",notes:"APEC (05/05). DGD = plein levier. ELATOS = cabinet, client non identifié. Montpellier = mobilité à confirmer.",date:"2026-05-06"},
+  {id:'c27',title:"Directeur de Business Unit Fourniture Industrielle F/H",company:"ADITO DEVELOPPEMENT",location:"Lyon (69)",source:"APEC",score:60,verdict:"cond",salary:"NC",status:"watch",url:"",notes:"APEC (05/05). BU fourniture industrielle = périmètre commercial + opérationnel. Risque : charge commerciale forte.",date:"2026-05-06"},
+  {id:'c28',title:"Directeur des Opérations Transport F/H",company:"Turnpoint",location:"Strasbourg (67)",source:"APEC",score:61,verdict:"cond",salary:"NC",status:"watch",url:"",notes:"APEC (05/05). Turnpoint = transport/logistique. Secteur transport ≠ industrie manufacturière.",date:"2026-05-06"},
+  {id:'c29',title:"Directeur Usine F/H",company:"Fed Engineering",location:"Troyes (10)",source:"APEC",score:62,verdict:"cond",salary:"NC",status:"watch",url:"",notes:"APEC (05/05). Fed Engineering = cabinet spécialisé industrie. Troyes = mobilité à confirmer (~300km d'Audincourt).",date:"2026-05-06"},
+  {id:'c30',title:"Directeur Automation & data engineering F/H",company:"Recherche confidentielle",location:"Multi-sites France",source:"APEC",score:52,verdict:"cond",salary:"NC",status:"watch",url:"",notes:"APEC (05/05). Offre confidentielle déclinée sur 11 localisations. Automation & data = périmètre tech/digital à qualifier.",date:"2026-05-06"},
+  {id:'c31',title:"Resp. site production Freelance",company:"Collective.work",location:"France",source:"Indeed",score:35,verdict:"no",salary:"727€/j",status:"closed",url:"",notes:"NO GO : freelance incompatible avec projet durable. Pas de levier management permanent.",date:"2026-05-06"},
+  {id:'c32',title:"Directeur Maintenance & Service Client",company:"CNS Worldwide Executive Search",location:"France",source:"LinkedIn",score:42,verdict:"no",salary:"NC",status:"closed",url:"",notes:"NO GO : PME + périmètre Maintenance seul + Service Client = scope fragmenté.",date:"2026-05-06"},
+  {id:'c33',title:"Directeur Projets Industriels SQCDME",company:"Agrial",location:"France",source:"LinkedIn",score:44,verdict:"no",salary:"NC",status:"closed",url:"",notes:"NO GO : rôle fonctionnel Projets/Méthodes/Standards, pas de responsabilité opérationnelle directe.",date:"2026-05-06"},
+  {id:'c34',title:"Directeur de Site Machines Spéciales Agro",company:"Cofabrik RH",location:"La Tour-du-Pin (38)",source:"Indeed",score:48,verdict:"no",salary:"NC",status:"closed",url:"",notes:"NO GO : niche technologique éloignée du profil, taille structure faible, localisation contraignante.",date:"2026-05-06"},
+  {id:'c35',title:"Directeur de production",company:"LOUAULT TECHNOLOGIES & INDUSTRIES",location:"France",source:"Indeed",score:45,verdict:"no",salary:"NC",status:"closed",url:"",notes:"NO GO : Directeur de production sans périmètre élargi documenté, PME probable.",date:"2026-05-06"},
+  {id:'c36',title:"Responsable de site industriel H/F",company:"Groupe PIMENT (AEROCONTACT)",location:"France",source:"LinkedIn",score:42,verdict:"no",salary:"NC",status:"closed",url:"",notes:"NO GO : Responsable de site = scope trop restreint, structure PME, secteur aéronautique niche.",date:"2026-05-06"},
+  {id:'c37',title:"Operations Maintenance Manager",company:"Prosolia Energy Group",location:"France",source:"LinkedIn",score:35,verdict:"no",salary:"NC",status:"closed",url:"",notes:"NO GO : périmètre Maintenance seul, énergies renouvelables = secteur services, pas d'usine industrielle.",date:"2026-05-06"},
+  {id:'c38',title:"Manager Production H/F",company:"IKIWAY Cabinet de Recrutement",location:"France",source:"LinkedIn",score:25,verdict:"no",salary:"38-40K€",status:"closed",url:"",notes:"NO GO : salaire affiché 38-40K€ — très en dessous du plancher (95K€). Éliminé immédiatement.",date:"2026-05-06"},
+  {id:'c39',title:"Partner Production Manager (f/m/d)",company:"Freudenberg Sealing Technologies",location:"France",source:"LinkedIn",score:38,verdict:"no",salary:"NC",status:"closed",url:"",notes:"NO GO : titre hybride Partner/Manager = périmètre flou, niche technique.",date:"2026-05-06"},
+  {id:'c40',title:"Directeur commercial - Manager Transition",company:"Leaderia",location:"Agen (47)",source:"APEC",score:30,verdict:"no",salary:"NC",status:"closed",url:"",notes:"NO GO : commercial/transition = hors profil opérationnel industriel.",date:"2026-05-06"},
+  {id:'c41',title:"Directeur Programmes Défense",company:"CIMEM",location:"Saint-Chély-d'Apcher (48)",source:"APEC",score:35,verdict:"no",salary:"NC",status:"closed",url:"",notes:"NO GO : rôle programmes/projets défense, localisation très isolée (48).",date:"2026-05-06"}
 ];
 
-
-document.querySelectorAll('.modal-overlay').forEach(m=>{
-  m.addEventListener('click', e=>{ if(e.target===m) m.classList.remove('open'); });
-});
-
+document.querySelectorAll('.modal-overlay').forEach(m=>{m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('open');});});
 load();
 </script>
 </body>
